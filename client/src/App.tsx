@@ -1484,17 +1484,17 @@ const EscolaObjetivoPage = () => {
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FFD700] text-slate-800 text-sm font-black mb-10 shadow-lg uppercase tracking-wider mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <School size={18} fill="currentColor" /> Educação de Excelência
+                <School size={18} fill="currentColor" /> Educação de Qualidade desde 2006
               </div>
               
               <h1 className="text-h1 text-slate-800 mb-2 leading-tight drop-shadow-sm flex flex-col md:flex-row md:items-baseline gap-4 justify-center lg:justify-start">
-                Escola Objetivo <span className="text-4xl md:text-5xl font-nunito font-bold text-slate-700">Iwata</span>
+                Colégio Objetivo de <span className="text-4xl md:text-5xl font-nunito font-bold text-slate-700">Iwata</span>
               </h1>
-              <h2 className="text-2xl md:text-3xl font-baloo text-slate-700/80 mb-8 font-bold">
-                Raízes Brasileiras, Asas Globais
+              <h2 className="text-2xl md:text-3xl font-baloo text-slate-700/80 mb-8 font-bold hidden">
+                
               </h2>
               <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium mx-auto lg:mx-0">
-                Formando cidadãos do mundo com o acolhimento da cultura brasileira e a excelência acadêmica do Sistema Objetivo.
+                Com uma história que se estende por mais de uma década desde sua fundação em 2006, o Colégio Objetivo de Iwata consagrou-se como uma instituição de ensino comprometida com a excelência educacional e o desenvolvimento integral dos alunos. Sob Sistema de Ensino Objetivo, a escola visa proporcionar uma educação de qualidade, promovendo a participação coletiva em uma abordagem educacional inovadora e significativa. Essa missão visa preparar cidadãos competentes e habilidosos, tanto para o mercado de trabalho quanto para a convivência social solidária.
               </p>
               
               <div className="flex flex-col md:flex-row gap-4 justify-center lg:justify-start">
