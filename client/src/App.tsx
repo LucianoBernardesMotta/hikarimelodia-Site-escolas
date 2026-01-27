@@ -33,21 +33,15 @@ import {
   ClipboardList,
   GraduationCap,
   School,
-  Coffee,
-  Waves,
-  Sun,
-  Smile,
+  Clock,
+  Globe,
   Book,
-  HandHeart,
-  Flower2,
-  Trophy,
-  Palette,
-  Lightbulb,
-  Search,
   ClipboardCheck,
+  Flower2,
+  Sun,
+  Lightbulb,
   Rocket,
-  Compass,
-  Globe
+  Trophy
 } from 'lucide-react';
 
 // --- Types & Data ---
@@ -268,7 +262,7 @@ const MusicalBackground = () => {
 
 const SectionTitle = ({ title, subtitle, centered = true, light = false }: any) => (
   <div className={`mb-12 ${centered ? 'text-center' : ''}`}>
-    <h2 className={`text-h2 mb-4 ${light ? 'text-white' : 'text-[#2D3436]'}`}>{title}</h2>
+    <h2 className={`text-h2 mb-4 font-baloo ${light ? 'text-white' : 'text-[#2D3436]'}`}>{title}</h2>
     {subtitle && <p className={`text-body max-w-2xl ${centered ? 'mx-auto' : ''} ${light ? 'text-white/80' : 'text-slate-600'}`}>{subtitle}</p>}
   </div>
 );
@@ -1482,121 +1476,160 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
 const EscolaObjetivoPage = () => {
   return (
     <div className="bg-white min-h-screen">
-      {/* Hero Institucional */}
-      <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#2D3436] to-[#636e72] overflow-hidden text-center lg:text-left">
-        <div className="absolute inset-0 opacity-20">
-          <img 
-            src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2064&auto=format&fit=crop" 
-            alt="Escola Objetivo" 
-            className="w-full h-full object-cover"
-          />
-        </div>
+      {/* Hero Institucional - Reestilizado com Style Guide Hikari */}
+      <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#5DCCD6] via-[#4FBFD9] to-[#D21E9D]/20 overflow-hidden text-center lg:text-left">
+        <MusicalBackground />
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-[#2D3436] mb-8 shadow-2xl">
-              <School size={48} />
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FFD700] text-slate-800 text-sm font-black mb-10 shadow-lg uppercase tracking-wider mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <School size={18} fill="currentColor" /> Educação de Excelência
+              </div>
+              
+              <h1 className="text-h1 text-slate-800 mb-2 leading-tight drop-shadow-sm flex flex-col md:flex-row md:items-baseline gap-4 justify-center lg:justify-start">
+                Escola Objetivo <span className="text-4xl md:text-5xl font-nunito font-bold text-slate-700">Iwata</span>
+              </h1>
+              <h2 className="text-2xl md:text-3xl font-baloo text-slate-700/80 mb-8 font-bold">
+                Raízes Brasileiras, Asas Globais
+              </h2>
+              <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium mx-auto lg:mx-0">
+                Formando cidadãos do mundo com o acolhimento da cultura brasileira e a excelência acadêmica do Sistema Objetivo.
+              </p>
+              
+              <div className="flex flex-col md:flex-row gap-4 justify-center lg:justify-start">
+                <button className="hikari-btn-accent px-8 py-4 text-lg font-extrabold shadow-xl flex items-center justify-center gap-3">
+                  AGENDAR VISITA <ClipboardCheck size={24} />
+                </button>
+                <button className="px-8 py-4 rounded-full border-4 border-white text-slate-700 font-bold hover:bg-white/50 transition-all flex items-center justify-center gap-3">
+                  CONHECER A ESTRUTURA
+                </button>
+              </div>
             </div>
-            
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight font-baloo">
-              Escola Objetivo de Iwata
-            </h1>
-            <p className="text-xl md:text-2xl text-slate-300 mb-10 font-medium max-w-3xl mx-auto">
-              Educação brasileira de excelência no Japão. Formando cidadãos globais com raízes fortes.
-            </p>
-            
-            <button className="bg-[#FFD700] text-slate-900 px-10 py-4 rounded-full font-black text-lg shadow-xl hover:scale-105 transition-transform flex items-center gap-2">
-              <ClipboardCheck size={24} /> MATRÍCULAS ABERTAS
-            </button>
+
+            <div className="flex-1 relative w-full max-w-xl">
+              <div className="relative z-10 rounded-[40px] overflow-hidden shadow-2xl border-[12px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
+                <img 
+                  src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2064&auto=format&fit=crop" 
+                  alt="Escola Objetivo Fachada" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-8">
+                  <p className="text-white font-bold text-lg italic">"Um pedacinho do Brasil no Japão"</p>
+                </div>
+              </div>
+              <div className="absolute -bottom-10 -left-10 animate-bounce hidden md:block delay-700">
+                 <Star size={64} className="text-[#FFD700] fill-current drop-shadow-lg" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Sobre a Escola */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
+      {/* Sobre a Escola - Reestilizado */}
+      <section className="py-24 bg-slate-50 relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-black text-slate-800 mb-6 font-baloo">Nossa História</h2>
-              <p className="text-slate-600 text-lg leading-relaxed mb-6">
+              <div className="inline-block px-4 py-1 bg-[#D21E9D]/10 text-[#D21E9D] rounded-full font-black text-xs uppercase tracking-widest mb-4">
+                Nossa Essência
+              </div>
+              <h2 className="text-h2 text-slate-800 mb-6">Educação que Acolhe e Transforma</h2>
+              <p className="text-slate-600 text-lg leading-relaxed mb-6 font-medium">
                 Fundada com o propósito de oferecer educação de qualidade para a comunidade brasileira no Japão, a Escola Objetivo de Iwata se tornou referência em ensino bilíngue e acolhimento cultural.
               </p>
-              <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                Acreditamos que a educação é a chave para o futuro. Por isso, utilizamos o renomado Sistema Objetivo de Ensino, garantindo que nossos alunos tenham a mesma base curricular forte das melhores escolas do Brasil, adaptada à realidade do Japão.
-              </p>
               
-              <div className="flex gap-4">
-                <div className="flex items-center gap-2 text-slate-700 font-bold">
-                  <CheckCircle2 className="text-[#60D394]" /> Reconhecida pelo MEC
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                  <div className="w-12 h-12 bg-[#60D394]/20 text-[#60D394] rounded-xl flex items-center justify-center">
+                    <CheckCircle2 size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-800">Reconhecida pelo MEC</h4>
+                    <p className="text-xs text-slate-500">Validade total no Brasil</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-slate-700 font-bold">
-                  <CheckCircle2 className="text-[#60D394]" /> Homologada no Japão
+                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                  <div className="w-12 h-12 bg-[#5A9DFC]/20 text-[#5A9DFC] rounded-xl flex items-center justify-center">
+                    <Globe size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-800">Homologada no Japão</h4>
+                    <p className="text-xs text-slate-500">Integração com o sistema local</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-[#FFD700] rounded-[40px] rotate-3"></div>
+            
+            <div className="grid grid-cols-2 gap-4">
               <img 
                 src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop" 
+                className="rounded-[30px] shadow-lg transform translate-y-8"
                 alt="Alunos estudando" 
-                className="relative rounded-[40px] shadow-2xl z-10"
+              />
+              <img 
+                src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1972&auto=format&fit=crop" 
+                className="rounded-[30px] shadow-lg"
+                alt="Atividade lúdica" 
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Diferenciais */}
-      <section className="py-24 bg-slate-50">
+      {/* Diferenciais - Style Guide Cards */}
+      <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <SectionTitle 
-            title="Por que escolher o Objetivo Iwata?" 
+            title="Por que o Objetivo Iwata?" 
             subtitle="Uma estrutura completa pensada para o desenvolvimento integral do seu filho."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: Globe, title: "Bilinguismo Real", desc: "Português como língua de herança e Japonês para integração total na sociedade." },
-              { icon: Book, title: "Material Didático", desc: "Apostilas atualizadas do Sistema Objetivo, o que mais aprova em vestibulares no Brasil." },
-              { icon: Users, title: "Acolhimento", desc: "Uma equipe pedagógica que entende os desafios e as belezas de viver entre duas culturas." }
+              { icon: Globe, color: "bg-[#5DCCD6]", title: "Bilinguismo Real", desc: "Português como língua de herança e Japonês para integração total na sociedade." },
+              { icon: Book, color: "bg-[#FFD700]", title: "Material Didático", desc: "Apostilas atualizadas do Sistema Objetivo, o que mais aprova em vestibulares no Brasil." },
+              { icon: Heart, color: "bg-[#D21E9D]", title: "Acolhimento", desc: "Uma equipe pedagógica que entende os desafios e as belezas de viver entre duas culturas." }
             ].map((item, i) => (
-              <div key={i} className="bg-white p-8 rounded-[30px] shadow-sm border border-slate-100 text-center hover:-translate-y-2 transition-transform">
-                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-800 mx-auto mb-6">
-                  <item.icon size={32} />
+              <div key={i} className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 text-center hover:shadow-xl hover:-translate-y-2 transition-all group">
+                <div className={`w-20 h-20 ${item.color} rounded-[30%] flex items-center justify-center text-white mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform clay-effect`}>
+                  <item.icon size={36} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-4">{item.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-bold font-baloo text-slate-800 mb-4">{item.title}</h3>
+                <p className="text-slate-600 leading-relaxed font-medium">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer Institucional */}
-      <footer className="bg-[#2D3436] text-white py-12">
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
+      {/* Footer Institucional - Mantendo padrão visual */}
+      <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           <div>
-            <div className="flex items-center gap-2 mb-6">
-              <School size={24} />
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-6">
+              <div className="w-10 h-10 bg-[#FFD700] rounded-xl flex items-center justify-center text-slate-900 shadow-lg">
+                <School size={24} strokeWidth={2.5} />
+              </div>
               <span className="font-baloo font-black text-2xl">Objetivo Iwata</span>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Formando líderes, construindo futuros e conectando culturas.
+            <p className="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
+              Formando líderes, construindo futuros e conectando culturas com excelência e afeto.
             </p>
           </div>
           <div>
-            <h4 className="font-bold text-lg mb-6">Contato</h4>
-            <ul className="space-y-4 text-slate-400 text-sm">
-              <li className="flex items-center gap-3"><MapPin size={16} /> Iwata-shi, Shizuoka-ken</li>
-              <li className="flex items-center gap-3"><MessageSquare size={16} /> +81 00-0000-0000</li>
-              <li className="flex items-center gap-3"><Clock size={16} /> Seg - Sex: 8h às 17h</li>
+            <h4 className="font-bold text-lg mb-6 font-baloo text-[#5DCCD6]">Contato</h4>
+            <ul className="space-y-4 text-slate-400 text-sm font-medium">
+              <li className="flex items-center justify-center md:justify-start gap-3"><MapPin size={18} className="text-[#FFD700]" /> Iwata-shi, Shizuoka-ken</li>
+              <li className="flex items-center justify-center md:justify-start gap-3"><MessageSquare size={18} className="text-[#FFD700]" /> +81 00-0000-0000</li>
+              <li className="flex items-center justify-center md:justify-start gap-3"><Clock size={18} className="text-[#FFD700]" /> Seg - Sex: 8h às 17h</li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-lg mb-6">Redes Sociais</h4>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#FFD700] hover:text-slate-900 transition-all">FB</a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#FFD700] hover:text-slate-900 transition-all">IG</a>
+            <h4 className="font-bold text-lg mb-6 font-baloo text-[#D21E9D]">Redes Sociais</h4>
+            <div className="flex gap-4 justify-center md:justify-start">
+              <a href="#" className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#FFD700] hover:text-slate-900 transition-all">FB</a>
+              <a href="#" className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#D21E9D] hover:text-white transition-all">IG</a>
             </div>
           </div>
         </div>
@@ -1649,16 +1682,16 @@ export default function App() {
           <div className="flex items-center gap-6">
             <button 
               onClick={() => setView('landing')}
-              className={`font-baloo font-bold text-lg transition-colors ${view === 'landing' || view === 'checkout' ? 'text-[#5DCCD6]' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`font-baloo font-bold text-lg transition-colors flex items-center gap-2 ${view === 'landing' || view === 'checkout' ? 'text-[#5DCCD6]' : 'text-slate-400 hover:text-slate-800'}`}
             >
-              Hikari Melodia
+              <Music size={18} /> Hikari Melodia
             </button>
-            <div className="h-4 w-px bg-slate-300"></div>
+            <div className="h-4 w-px bg-slate-200"></div>
             <button 
               onClick={() => setView('eoi')}
-              className={`font-baloo font-bold text-lg transition-colors ${view === 'eoi' ? 'text-[#FFD700]' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`font-baloo font-bold text-lg transition-colors flex items-center gap-2 ${view === 'eoi' ? 'text-[#FFD700]' : 'text-slate-400 hover:text-slate-800'}`}
             >
-              Escola Objetivo
+              <School size={18} /> Escola Objetivo
             </button>
           </div>
           
@@ -1672,7 +1705,7 @@ export default function App() {
             </button>
             <button 
               onClick={() => handleStartCheckout('mensal')}
-              className="hidden md:flex px-5 py-2 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-all"
+              className="hidden md:flex px-5 py-2 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-all shadow-md"
             >
               Área do Aluno
             </button>
@@ -1722,6 +1755,3 @@ export default function App() {
     </div>
   );
 }
-
-// Missing icon import fix
-import { Clock } from 'lucide-react';
