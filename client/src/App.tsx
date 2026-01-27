@@ -668,7 +668,7 @@ const EnsinoMedioModal = ({ onClose }: { onClose: () => void }) => {
           </div>
 
           <p className="text-slate-700 text-base md:text-lg leading-relaxed mb-10 font-medium">
-            No Ensino Médio, nosso compromisso é com a formação acadêmica sólida, mensurável e orientada por objetivos específicos. Adotamos o <span className="text-[#D21E9D] font-black">Sistema Objetivo de Ensino</span>, no qual todo o currículo é estruturado em metas de aprendizagem explícitas, sequenciais e avaliáveis, garantindo que nenhum conteúdo essencial seja negligenciado.
+            No Ensino Médio, nosso compromisso é com a formação acadêmica sólida, mensurável e orientada por objetivos específicos. Adotamos o <span className="text-[#D21E9D] font-black">Sistema Objetivo de Ensino</span>, no qual todo o currículo é estruturado em metas de aprendizagem explícitas, sequenciais e avaliáveis, garantindo que nenhuma conteúdo essencial seja negligenciado.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1497,25 +1497,12 @@ const EscolaObjetivoPage = () => {
                 Com uma história que se estende por mais de uma década desde sua fundação em 2006, o Colégio Objetivo de Iwata consagrou-se como uma instituição de ensino comprometida com a excelência educacional e o desenvolvimento integral dos alunos. Sob Sistema de Ensino Objetivo, a escola visa proporcionar uma educação de qualidade, promovendo a participação coletiva em uma abordagem educacional inovadora e significativa. Essa missão visa preparar cidadãos competentes e habilidosos, tanto para o mercado de trabalho quanto para a convivência social solidária.
               </p>
               
-              <div className="flex flex-col md:flex-row gap-4 justify-center lg:justify-start">
-                <button className="hikari-btn-accent px-8 py-4 text-lg font-extrabold shadow-xl flex items-center justify-center gap-3">
-                  AGENDAR VISITA <ClipboardCheck size={24} />
-                </button>
-                <button className="px-8 py-4 rounded-full border-4 border-white text-slate-700 font-bold hover:bg-white/50 transition-all flex items-center justify-center gap-3">
-                  CONHECER A ESTRUTURA
-                </button>
-              </div>
             </div>
 
             <div className="flex-1 relative w-full max-w-xl">
               <div className="relative z-10 rounded-[40px] overflow-hidden shadow-2xl border-[12px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
-                <img 
-                  src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2064&auto=format&fit=crop" 
-                  alt="Escola Objetivo Fachada" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-8">
-                  <p className="text-white font-bold text-lg italic">"Um pedacinho do Brasil no Japão"</p>
+                <div className="w-full h-full bg-slate-200 aspect-video flex items-center justify-center text-slate-400 font-bold">
+                   <span className="flex items-center gap-2"><School size={32} /> Imagem Institucional</span>
                 </div>
               </div>
               <div className="absolute -bottom-10 -left-10 animate-bounce hidden md:block delay-700">
@@ -1562,16 +1549,7 @@ const EscolaObjetivoPage = () => {
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <img 
-                src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop" 
-                className="rounded-[30px] shadow-lg transform translate-y-8"
-                alt="Alunos estudando" 
-              />
-              <img 
-                src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1972&auto=format&fit=crop" 
-                className="rounded-[30px] shadow-lg"
-                alt="Atividade lúdica" 
-              />
+              
             </div>
           </div>
         </div>
