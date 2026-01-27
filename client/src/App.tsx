@@ -1501,9 +1501,11 @@ const EscolaObjetivoPage = () => {
 
             <div className="flex-1 relative w-full max-w-xl">
               <div className="relative z-10 rounded-[40px] overflow-hidden shadow-2xl border-[12px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
-                <div className="w-full h-full bg-slate-200 aspect-video flex items-center justify-center text-slate-400 font-bold">
-                   <span className="flex items-center gap-2"><School size={32} /> Imagem Institucional</span>
-                </div>
+                <img 
+                  src="/hero-objetivo.png" 
+                  alt="Colégio Objetivo de Iwata - Educando com Amor" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="absolute -bottom-10 -left-10 animate-bounce hidden md:block delay-700">
                  <Star size={64} className="text-[#FFD700] fill-current drop-shadow-lg" />
