@@ -1,0 +1,7 @@
+- [ ] Localizar o componente/página referente à "Escola Objetivo de Iwata" no `App.tsx` original (provavelmente a view 'eoi' ou similar).
+- [ ] Analisar a estrutura da página da Escola Objetivo (seções, design, conteúdo).
+- [ ] Identificar a implementação completa da Área Administrativa (Dashboard) no código original.
+- [ ] Criar um sistema de navegação claro para alternar entre "Hikari Melodia" e "Escola Objetivo de Iwata".
+- [ ] Implementar a página da Escola Objetivo de Iwata.
+- [ ] Garantir que todos os modais da Escola Objetivo estejam funcionando corretamente.
+- [ ] Revisar e expandir a Área Administrativa conforme o original.

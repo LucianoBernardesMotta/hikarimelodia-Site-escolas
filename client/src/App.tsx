@@ -46,7 +46,8 @@ import {
   Search,
   ClipboardCheck,
   Rocket,
-  Compass
+  Compass,
+  Globe
 } from 'lucide-react';
 
 // --- Types & Data ---
@@ -1263,21 +1264,6 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
       <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#5DCCD6] via-[#4FBFD9] to-[#D21E9D]/20 overflow-hidden text-center lg:text-left">
         <MusicalBackground />
         
-        <nav className="absolute top-0 w-full p-6 flex justify-between items-center max-w-7xl mx-auto z-10 left-0 right-0">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg rotate-3">
-              <Music size={24} strokeWidth={3} />
-            </div>
-            <span className="font-baloo font-black text-2xl text-slate-800 tracking-tight">Hikari Melodia</span>
-          </div>
-          <button 
-            onClick={() => onStartCheckout('mensal')}
-            className="px-6 py-2.5 rounded-full bg-white text-slate-900 font-bold text-sm shadow-md hover:shadow-lg transition-all border border-slate-100 hidden md:block"
-          >
-            Área do Aluno
-          </button>
-        </nav>
-
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="flex-1">
@@ -1493,6 +1479,132 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
   );
 };
 
+const EscolaObjetivoPage = () => {
+  return (
+    <div className="bg-white min-h-screen">
+      {/* Hero Institucional */}
+      <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#2D3436] to-[#636e72] overflow-hidden text-center lg:text-left">
+        <div className="absolute inset-0 opacity-20">
+          <img 
+            src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2064&auto=format&fit=crop" 
+            alt="Escola Objetivo" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-[#2D3436] mb-8 shadow-2xl">
+              <School size={48} />
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight font-baloo">
+              Escola Objetivo de Iwata
+            </h1>
+            <p className="text-xl md:text-2xl text-slate-300 mb-10 font-medium max-w-3xl mx-auto">
+              Educação brasileira de excelência no Japão. Formando cidadãos globais com raízes fortes.
+            </p>
+            
+            <button className="bg-[#FFD700] text-slate-900 px-10 py-4 rounded-full font-black text-lg shadow-xl hover:scale-105 transition-transform flex items-center gap-2">
+              <ClipboardCheck size={24} /> MATRÍCULAS ABERTAS
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Sobre a Escola */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl font-black text-slate-800 mb-6 font-baloo">Nossa História</h2>
+              <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                Fundada com o propósito de oferecer educação de qualidade para a comunidade brasileira no Japão, a Escola Objetivo de Iwata se tornou referência em ensino bilíngue e acolhimento cultural.
+              </p>
+              <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                Acreditamos que a educação é a chave para o futuro. Por isso, utilizamos o renomado Sistema Objetivo de Ensino, garantindo que nossos alunos tenham a mesma base curricular forte das melhores escolas do Brasil, adaptada à realidade do Japão.
+              </p>
+              
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2 text-slate-700 font-bold">
+                  <CheckCircle2 className="text-[#60D394]" /> Reconhecida pelo MEC
+                </div>
+                <div className="flex items-center gap-2 text-slate-700 font-bold">
+                  <CheckCircle2 className="text-[#60D394]" /> Homologada no Japão
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-0 bg-[#FFD700] rounded-[40px] rotate-3"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop" 
+                alt="Alunos estudando" 
+                className="relative rounded-[40px] shadow-2xl z-10"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Diferenciais */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <SectionTitle 
+            title="Por que escolher o Objetivo Iwata?" 
+            subtitle="Uma estrutura completa pensada para o desenvolvimento integral do seu filho."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { icon: Globe, title: "Bilinguismo Real", desc: "Português como língua de herança e Japonês para integração total na sociedade." },
+              { icon: Book, title: "Material Didático", desc: "Apostilas atualizadas do Sistema Objetivo, o que mais aprova em vestibulares no Brasil." },
+              { icon: Users, title: "Acolhimento", desc: "Uma equipe pedagógica que entende os desafios e as belezas de viver entre duas culturas." }
+            ].map((item, i) => (
+              <div key={i} className="bg-white p-8 rounded-[30px] shadow-sm border border-slate-100 text-center hover:-translate-y-2 transition-transform">
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-800 mx-auto mb-6">
+                  <item.icon size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-4">{item.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer Institucional */}
+      <footer className="bg-[#2D3436] text-white py-12">
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <School size={24} />
+              <span className="font-baloo font-black text-2xl">Objetivo Iwata</span>
+            </div>
+            <p className="text-slate-400 text-sm leading-relaxed">
+              Formando líderes, construindo futuros e conectando culturas.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-bold text-lg mb-6">Contato</h4>
+            <ul className="space-y-4 text-slate-400 text-sm">
+              <li className="flex items-center gap-3"><MapPin size={16} /> Iwata-shi, Shizuoka-ken</li>
+              <li className="flex items-center gap-3"><MessageSquare size={16} /> +81 00-0000-0000</li>
+              <li className="flex items-center gap-3"><Clock size={16} /> Seg - Sex: 8h às 17h</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-lg mb-6">Redes Sociais</h4>
+            <div className="flex gap-4">
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#FFD700] hover:text-slate-900 transition-all">FB</a>
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#FFD700] hover:text-slate-900 transition-all">IG</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
 // --- App Root ---
 
 export default function App() {
@@ -1500,8 +1612,6 @@ export default function App() {
   const [selectedPlan, setSelectedPlan] = useState<'mensal' | 'anual'>('anual');
   const [userData, setUserData] = useState<any>(null);
   
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
 
   // Modal States
@@ -1532,39 +1642,71 @@ export default function App() {
   }, [view]);
 
   return (
-    <div className="min-h-screen">
-      {/* Admin Button */}
-      <button 
-        onClick={() => setShowDashboard(true)}
-        className="fixed bottom-4 left-4 z-50 p-2 bg-white/50 backdrop-blur hover:bg-white rounded-full text-slate-400 hover:text-slate-800 transition-all shadow-sm border border-slate-200"
-        title="Admin Dashboard"
-      >
-        <Lock size={16} />
-      </button>
+    <div className="min-h-screen relative">
+      {/* Top Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm h-16 px-4">
+        <div className="container mx-auto h-full flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <button 
+              onClick={() => setView('landing')}
+              className={`font-baloo font-bold text-lg transition-colors ${view === 'landing' || view === 'checkout' ? 'text-[#5DCCD6]' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              Hikari Melodia
+            </button>
+            <div className="h-4 w-px bg-slate-300"></div>
+            <button 
+              onClick={() => setView('eoi')}
+              className={`font-baloo font-bold text-lg transition-colors ${view === 'eoi' ? 'text-[#FFD700]' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              Escola Objetivo
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setShowDashboard(true)}
+              className="p-2 text-slate-400 hover:text-slate-800 transition-colors"
+              title="Área Administrativa"
+            >
+              <Lock size={18} />
+            </button>
+            <button 
+              onClick={() => handleStartCheckout('mensal')}
+              className="hidden md:flex px-5 py-2 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-all"
+            >
+              Área do Aluno
+            </button>
+          </div>
+        </div>
+      </nav>
 
-      {/* Views */}
-      {view === 'landing' && (
-        <HikariMelodiaPage 
-          onStartCheckout={handleStartCheckout}
-          setSelectedMethodology={setSelectedMethodology}
-          setShowCreche={setShowCreche}
-          setShowEducacaoInfantil={setShowEducacaoInfantil}
-          setShowEnsinoFundamental={setShowEnsinoFundamental}
-          setShowEnsinoMedio={setShowEnsinoMedio}
-        />
-      )}
+      {/* Main Content Spacer */}
+      <div className="pt-16">
+        {view === 'landing' && (
+          <HikariMelodiaPage 
+            onStartCheckout={handleStartCheckout}
+            setSelectedMethodology={setSelectedMethodology}
+            setShowCreche={setShowCreche}
+            setShowEducacaoInfantil={setShowEducacaoInfantil}
+            setShowEnsinoFundamental={setShowEnsinoFundamental}
+            setShowEnsinoMedio={setShowEnsinoMedio}
+          />
+        )}
 
-      {view === 'checkout' && (
-        <CheckoutPage 
-          initialPlan={selectedPlan} 
-          onComplete={handleCompletePurchase}
-          onCancel={() => setView('landing')}
-        />
-      )}
+        {view === 'eoi' && <EscolaObjetivoPage />}
 
-      {view === 'welcome' && userData && (
-        <WelcomePage userData={userData} />
-      )}
+        {view === 'checkout' && (
+          <CheckoutPage 
+            initialPlan={selectedPlan} 
+            onComplete={handleCompletePurchase}
+            onCancel={() => setView('landing')}
+          />
+        )}
+
+        {view === 'welcome' && userData && (
+          <WelcomePage userData={userData} />
+        )}
+      </div>
 
       {/* Modals */}
       {selectedMethodology && (
@@ -1580,3 +1722,6 @@ export default function App() {
     </div>
   );
 }
+
+// Missing icon import fix
+import { Clock } from 'lucide-react';
