@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { 
   Music, 
   Brain, 
@@ -1474,8 +1475,28 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
 };
 
 const EscolaObjetivoPage = () => {
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
   return (
     <div className="bg-white min-h-screen">
+      {/* Lightbox Modal */}
+      <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] w-auto h-auto p-0 border-none bg-transparent shadow-none flex items-center justify-center overflow-hidden">
+          <div className="relative">
+            <button 
+              onClick={() => setIsLightboxOpen(false)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors bg-black/50 rounded-full p-2 backdrop-blur-sm"
+            >
+              <X size={24} />
+            </button>
+            <img 
+              src="/hero-objetivo.png" 
+              alt="Colégio Objetivo de Iwata - Expandido" 
+              className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
       {/* Hero Institucional - Reestilizado com Style Guide Hikari */}
       <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#5DCCD6] via-[#4FBFD9] to-[#D21E9D]/20 overflow-hidden text-center lg:text-left">
         <MusicalBackground />
@@ -1499,13 +1520,21 @@ const EscolaObjetivoPage = () => {
               
             </div>
 
-            <div className="flex-1 relative w-full max-w-xl">
-              <div className="relative z-10 rounded-[40px] overflow-hidden shadow-2xl border-[12px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
+            <div className="flex-1 relative w-full max-w-xl cursor-pointer" onClick={() => setIsLightboxOpen(true)}>
+              <div className="relative z-10 rounded-[20px] overflow-hidden shadow-2xl border-[6px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_2.5s_infinite]" />
+                
                 <img 
                   src="/hero-objetivo.png" 
                   alt="Colégio Objetivo de Iwata - Educando com Amor" 
                   className="w-full h-full object-cover"
                 />
+                
+                {/* Click Hint Overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+                  <Maximize2 className="text-white drop-shadow-md scale-0 group-hover:scale-100 transition-transform duration-300" size={48} />
+                </div>
               </div>
               <div className="absolute -bottom-10 -left-10 animate-bounce hidden md:block delay-700">
                  <Star size={64} className="text-[#FFD700] fill-current drop-shadow-lg" />
