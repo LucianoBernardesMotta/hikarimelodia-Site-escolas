@@ -1,42 +1,1507 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  Music, 
+  Brain, 
+  Users, 
+  Target, 
+  ChevronRight, 
+  Heart, 
+  Star, 
+  ShieldCheck, 
+  CheckCircle2,
+  Zap,
+  X,
+  BookOpen,
+  ArrowLeft,
+  Baby,
+  Play,
+  QrCode,
+  Sparkles,
+  Gift,
+  Maximize2,
+  ChevronLeft,
+  RotateCw,
+  MessageSquare,
+  Pause,
+  ArrowRight,
+  Shield,
+  Lock,
+  BarChart3,
+  TrendingUp,
+  Calendar,
+  MapPin,
+  ClipboardList,
+  GraduationCap,
+  School,
+  Coffee,
+  Waves,
+  Sun,
+  Smile,
+  Book,
+  HandHeart,
+  Flower2,
+  Trophy,
+  Palette,
+  Lightbulb,
+  Search,
+  ClipboardCheck,
+  Rocket,
+  Compass
+} from 'lucide-react';
 
+// --- Types & Data ---
 
-function Router() {
-  return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
+interface MethodologyDetail {
+  id: string;
+  icon: any;
+  title: string;
+  description: string;
+  color: string;
+  copy: string;
+  scientificBase: string;
+  sources: string[];
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+interface Subscriber {
+  id: string;
+  childName: string;
+  age: string;
+  parentName: string;
+  address: string;
+  whatsapp: string;
+  plan: string;
+  date: string;
+}
 
-function App() {
+const METHODOLOGY_DATA: MethodologyDetail[] = [
+  {
+    id: 'neuro',
+    icon: Brain,
+    title: "Ativação Neuroquímica",
+    description: "A música libera dopamina e oxitocina, transformando o estudo em um momento de prazer.",
+    color: "bg-purple-500",
+    copy: "A música não é apenas entretenimento; é um 'hack' biológico. Quando seu filho ouve e canta as melodias do Hikari, o cérebro dele entra em estado de fluxo (Flow State). A dopamina facilita a formation de novas sinapses, transformando o que seria uma 'decoreba' cansativa em um registro de memória de longo prazo emocionalmente marcado.",
+    scientificBase: "Estudos de neuroimagem mostram que o sistema de recompensa do cérebro é ativado intensamente pela música, liberando dopamina no estriado dorsal e ventral. Isso reduz os níveis de cortisol, eliminando o 'bloqueio afetivo' que impede muitas crianças de tentarem falar um novo idioma.",
+    sources: [
+      "Salimpoor, V. N., et al. (2011). 'Anatomically distinct dopamine release during anticipation and experience of peak emotion to music'. Nature Neuroscience.",
+      "Zatorre, R. J. (2015). 'Musical pleasure and reward: From genes to networks'."
+    ]
+  },
+  {
+    id: 'auditory',
+    icon: Music,
+    title: "Córtex Auditivo",
+    description: "Afinamos o ouvido da criança para distinguir fonemas complexos do japonês.",
+    color: "bg-indigo-500",
+    copy: "O japonês é uma língua de 'pitch accent' (acentuação tonal). Para uma criança brasileira, distinguir entre 'kaki' (caqui) e 'kaki' (ostra) exige um ouvido ultra-treinado. Através de frequências musicais específicas, o Hikari Melodia 'calibra' o córtex auditivo, tornando a percepção dos sons nativos automática e natural.",
+    scientificBase: "Pesquisas indicam que o treinamento musical melhora a plasticidade do tronco cerebral auditivo. Músicos têm uma capacidade superior de detectar variações sutis em línguais tonais ou de acento rítmico, pois as áreas de processamento de altura (pitch) e tempo são compartilhadas entre música e fala.",
+    sources: [
+      "Patel, A. D. (2008). 'Music, Language, and the Brain'. Oxford University Press.",
+      "Marques, C., et al. (2007). 'How musical training affects foreign language speech perception'. Cerebral Cortex."
+    ]
+  },
+  {
+    id: 'physio',
+    icon: Target,
+    title: "Fisioterapia Digital",
+    description: "O Treinador de Pronúncia treina a musculatura da fala, prevenindo erros duradouros.",
+    color: "bg-rose-500",
+    copy: "Falar é um ato motor. Os músculos da língua e da face precisam de 'coreografia' para produzir sons japoneses sem sotaque pesado. O Hikari usa o ritmo (beat) para guiar o tempo de abertura da boca e a pressão do ar, funcionando como uma fisioterapia lúdica que instala a pronúncia correta na memória muscular.",
+    scientificBase: "A Teoria do Entrainment Rítmico sugere que o ritmo musical sincroniza os disparos neuronais motores. Isso auxilia na coordenação da área de Broca (produção da fala), permitindo que a criança automatize sequências fonéticas complexas com menor esforço cognitivo.",
+    sources: [
+      "Stahl, B., et al. (2011). 'Singing aids the rehabilitation of speech in left-hemisphere stroke patients'. Brain.",
+      "Fujii, S., & Wan, C. Y. (2014). 'The role of rhythm in speech and language rehabilitation'."
+    ]
+  },
+  {
+    id: 'social',
+    icon: Users,
+    title: "Vínculo Social",
+    description: "O aprendizado em 'Alianças' combate a solidão e gera segurança emocional.",
+    color: "bg-green-500",
+    copy: "O isolamento é o maior inimigo do aprendizado. Ao participar de 'Alianças', seu filho ativa os neurônios-espelho através da co-ação rítmica. Cantar e aprender junto, mesmo que digitalmente, cria um senso de pertencimento (Ibasho) que é fundamental para a saúde mental da criança brasileira no Japão.",
+    scientificBase: "A sincronização interpessoal mediada pela música aumenta os níveis de oxitocina, o hormônio do vínculo. Grupos que realizam atividades rítmicas juntos demonstram maior cooperação e empatia, reduzindo a ansiedade social associada ao uso da 'língua do outro'.",
+    sources: [
+      "Tarr, B., et al. (2014). 'Music and social bonding: self-other merging and neurohormonal mechanisms'. Frontiers in Psychology.",
+      "Koelsch, S. (2014). 'Brain correlates of music-evoked emotions'."
+    ]
+  }
+];
+
+const PRESENTATION_IMAGES = [
+  "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1974&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=2040&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1972&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?q=80&w=2069&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=2072&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1460518451285-97b6aa326961?q=80&w=2070&auto=format&fit=crop"
+];
+
+// --- Stats Helpers ---
+
+const updateStats = (key: string, value: any = null) => {
+  if (key === 'visit') {
+    const current = Number(localStorage.getItem('hikari_total_visits') || 0);
+    localStorage.setItem('hikari_total_visits', (current + 1).toString());
+  } else if (key === 'registration_initiated') {
+    const current = Number(localStorage.getItem('hikari_registrations_initiated') || 0);
+    localStorage.setItem('hikari_registrations_initiated', (current + 1).toString());
+  } else if (key === 'subscription_completed') {
+    const current = Number(localStorage.getItem('hikari_subscriptions_completed') || 0);
+    localStorage.setItem('hikari_subscriptions_completed', (current + 1).toString());
+    const now = new Date().toLocaleString('pt-BR');
+    localStorage.setItem('hikari_last_subscription_date', now);
+    
+    if (value) {
+      const plans = JSON.parse(localStorage.getItem('hikari_plan_counts') || '{"mensal": 0, "anual": 0}');
+      plans[value.plan] = (plans[value.plan] || 0) + 1;
+      localStorage.setItem('hikari_plan_counts', JSON.stringify(plans));
+
+      const subscribers: Subscriber[] = JSON.parse(localStorage.getItem('hikari_subscribers') || '[]');
+      const newSubscriber: Subscriber = {
+        id: Math.random().toString(36).substr(2, 9),
+        childName: value.childName,
+        age: value.age,
+        parentName: value.parentName,
+        address: value.address,
+        whatsapp: value.whatsapp,
+        plan: value.plan,
+        date: now
+      };
+      subscribers.unshift(newSubscriber);
+      localStorage.setItem('hikari_subscribers', JSON.stringify(subscribers.slice(0, 100)));
+    }
+  }
+};
+
+const getStats = () => {
+  const plans = JSON.parse(localStorage.getItem('hikari_plan_counts') || '{"mensal": 0, "anual": 0}');
+  const subscribers: Subscriber[] = JSON.parse(localStorage.getItem('hikari_subscribers') || '[]');
+  const mostPopular = plans.anual >= plans.mensal ? 'Anual' : 'Mensal';
+  
+  return {
+    visits: localStorage.getItem('hikari_total_visits') || '0',
+    initiated: localStorage.getItem('hikari_registrations_initiated') || '0',
+    completed: localStorage.getItem('hikari_subscriptions_completed') || '0',
+    lastDate: localStorage.getItem('hikari_last_subscription_date') || 'Nenhuma até agora',
+    subscribers,
+    mostPopular
+  };
+};
+
+// --- Shared Components ---
+
+const SakuraBackground = () => {
+  const petals = useMemo(() => Array.from({ length: 15 }).map((_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 10}s`,
+    duration: `${6 + Math.random() * 6}s`,
+    size: `${10 + Math.random() * 15}px`,
+    rotate: `${Math.random() * 360}deg`
+  })), []);
+
   return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+      {petals.map((petal) => (
+        <div
+          key={petal.id}
+          className="sakura-petal"
+          style={{
+            left: petal.left,
+            width: petal.size,
+            height: petal.size,
+            animationDelay: petal.delay,
+            animationDuration: petal.duration,
+            transform: `rotate(${petal.rotate})`
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const MusicalBackground = () => {
+  const notes = useMemo(() => {
+    const symbols = ['♪', '♫', '♬', '♩'];
+    return Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      symbol: symbols[i % symbols.length],
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 10}s`,
+      duration: `${15 + Math.random() * 15}s`,
+      scale: 0.5 + Math.random() * 1.5,
+      opacity: 0.1 + Math.random() * 0.3,
+      blur: Math.random() > 0.7 ? 'blur(1px)' : 'none'
+    }));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+      {notes.map((note) => (
+        <div
+          key={note.id}
+          className="absolute font-serif text-[#D4AF37] animate-note-float select-none drop-shadow-sm"
+          style={{
+            left: note.left,
+            top: note.top,
+            fontSize: `${note.scale * 2.5}rem`,
+            opacity: note.opacity,
+            filter: note.blur,
+          }}
+        >
+          {note.symbol}
+        </div>
+      ))}
+      <div className="hikari-cloud absolute top-[15%] left-[10%] w-72 h-32 bg-white/20 rounded-full blur-2xl"></div>
+      <div className="hikari-cloud absolute bottom-[20%] right-[15%] w-96 h-40 bg-white/20 rounded-full blur-2xl"></div>
+    </div>
+  );
+};
+
+const SectionTitle = ({ title, subtitle, centered = true, light = false }: any) => (
+  <div className={`mb-12 ${centered ? 'text-center' : ''}`}>
+    <h2 className={`text-h2 mb-4 ${light ? 'text-white' : 'text-[#2D3436]'}`}>{title}</h2>
+    {subtitle && <p className={`text-body max-w-2xl ${centered ? 'mx-auto' : ''} ${light ? 'text-white/80' : 'text-slate-600'}`}>{subtitle}</p>}
+  </div>
+);
+
+const ClayIcon = ({ icon: Icon, color, label }: { icon: any, color: string, label: string }) => (
+  <div className="flex flex-col items-center gap-4 group cursor-default">
+    <div className={`relative w-24 h-24 flex items-center justify-center rounded-[35%] transition-transform duration-500 group-hover:scale-105 clay-effect ${color} animate-clay-pulse`}>
+      <Icon size={40} className="text-white drop-shadow-md" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 text-center max-w-[120px] font-baloo leading-tight">{label}</span>
+  </div>
+);
+
+const ImageCarousel = ({ images }: { images: string[] }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const openLightbox = (index: number) => {
+    setCurrentIndex(index);
+    setIsOpen(true);
+  };
+
+  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % images.length);
+  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+  }, [isOpen]);
+
+  return (
+    <>
+      <div className="relative group w-full overflow-hidden py-10">
+        <div className="flex gap-4 overflow-x-auto pb-8 scrollbar-hide px-4 snap-x">
+          {images.map((src, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => openLightbox(idx)}
+              className="min-w-[280px] md:min-w-[400px] aspect-[16/9] rounded-2xl overflow-hidden shadow-lg cursor-pointer transform hover:scale-[1.02] transition-all snap-center relative border-4 border-white"
+            >
+              <img src={src} alt={`Slide ${idx + 1}`} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/10 hover:bg-black/0 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+                <Maximize2 className="text-white drop-shadow-lg" size={32} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center gap-2">
+          {images.map((_, i) => (
+            <div key={i} className={`w-2 h-2 rounded-full transition-all ${i === currentIndex ? 'bg-[#5DCCD6] w-6' : 'bg-slate-300'}`} />
+          ))}
+        </div>
+      </div>
+
+      {isOpen && (
+        <div className="fixed inset-0 z-[200] bg-slate-900/98 backdrop-blur-xl flex flex-col items-center justify-center p-4">
+          <button 
+            onClick={() => setIsOpen(false)} 
+            className="absolute top-6 right-6 z-[210] p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+          >
+            <X size={24} />
+          </button>
+          
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-yellow-400 text-slate-900 px-4 py-2 rounded-full font-bold text-xs animate-bounce shadow-xl">
+            <RotateCw size={14} /> Coloque o celular na horizontal
+          </div>
+
+          <div className="relative w-full max-w-6xl aspect-video flex items-center justify-center group">
+            <button onClick={prevSlide} className="absolute left-0 z-[210] p-4 text-white/50 hover:text-white transition-all">
+              <ChevronLeft size={48} />
+            </button>
+            <img 
+              src={images[currentIndex]} 
+              alt="Slide Expanded" 
+              className="w-full h-full object-contain rounded-xl shadow-2xl animate-in zoom-in duration-300" 
+            />
+            <button onClick={nextSlide} className="absolute right-0 z-[210] p-4 text-white/50 hover:text-white transition-all">
+              <ChevronRight size={48} />
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+// --- Modal Components ---
+
+const CrecheModal = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-[500] bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-2xl rounded-[40px] shadow-3xl overflow-hidden flex flex-col relative animate-in zoom-in slide-in-from-bottom-8 duration-500">
+        
+        {/* Colorful Header */}
+        <div className="h-40 bg-gradient-to-r from-[#5A9DFC] via-[#FFB3D9] to-[#FFD700] p-8 flex items-center justify-center relative overflow-hidden">
+          <MusicalBackground />
+          <div className="absolute top-6 right-6 z-10">
+            <button onClick={onClose} className="p-2.5 bg-white/30 hover:bg-white/50 text-white rounded-full transition-all shadow-lg backdrop-blur-sm">
+              <X size={24} strokeWidth={3} />
+            </button>
+          </div>
+          <div className="relative z-10 flex flex-col items-center mt-4">
+            <div className="w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#5A9DFC] mb-2 animate-bounce-subtle">
+              <Baby size={36} />
+            </div>
+            <h3 className="text-3xl font-black text-white font-baloo drop-shadow-md">Creche</h3>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-8 md:p-12 overflow-y-auto max-h-[70vh] bg-[#FDFDFD]">
+          <div className="text-center mb-8">
+            <h4 className="text-xl font-bold text-slate-800 font-baloo mb-2">Primeiros passos, primeiras conexões</h4>
+            <div className="w-20 h-1 bg-[#FFB3D9] mx-auto rounded-full"></div>
+          </div>
+
+          <p className="text-slate-700 text-lg leading-relaxed mb-8 font-medium text-center italic">
+            "Na Creche, cada gesto é descoberta, cada olhar é vínculo. Nosso ambiente acolhedor é pensado especialmente para bebês e crianças pequenas (0 a 3 anos), onde o cuidado afetuoso se une à intencionalidade pedagógica."
+          </p>
+
+          <div className="space-y-6">
+            <h5 className="font-black text-[#D21E9D] text-sm uppercase tracking-widest mb-4">Aqui, o aprendizado acontece por meio de:</h5>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                { icon: Sparkles, color: "text-[#FFD700]", bg: "bg-[#FFD700]/10", text: "Brincadeiras sensoriais (texturas, sons, movimentos)" },
+                { icon: ShieldCheck, color: "text-[#5A9DFC]", bg: "bg-[#5A9DFC]/10", text: "Rotinas previsíveis que constroem segurança emocional" },
+                { icon: Users, color: "text-[#60D394]", bg: "bg-[#60D394]/10", text: "Interações suaves com pares e adultos, incentivando os primeiros laços sociais" },
+                { icon: Flower2, color: "text-[#4CAF50]", bg: "bg-[#4CAF50]/10", text: "Contato com elementos naturais (água, areia, folhas, luz natural)" },
+                { icon: Music, color: "text-[#FFB3D9]", bg: "bg-[#FFB3D9]/10", text: "Estímulos culturais lúdicos: canções em português e japonês" },
+              ].map((item, i) => (
+                <div key={i} className={`${item.bg} p-5 rounded-3xl flex gap-4 items-start transition-all hover:scale-[1.02]`}>
+                  <div className={`shrink-0 ${item.color} mt-1`}>
+                    <item.icon size={22} strokeWidth={2.5} />
+                  </div>
+                  <span className="text-slate-700 font-bold text-sm leading-snug">{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12 bg-slate-50 p-8 rounded-[35px] border-2 border-slate-100">
+            <p className="text-slate-600 font-medium leading-relaxed">
+              Nossa equipe observa atentamente os ritmos individuais de cada criança, respeitando seu tempo para engatinhar, falar, compartilhar ou apenas observar. 
+              <br/><br/>
+              <span className="text-slate-900 font-black">Porque nesta fase, brincar não é só diversão — é a linguagem do desenvolvimento.</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center">
+          <button 
+            onClick={onClose}
+            className="hikari-btn-primary px-10 py-4 font-black shadow-lg"
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EducacaoInfantilModal = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-[500] bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-3xl rounded-[40px] shadow-3xl overflow-hidden flex flex-col relative animate-in zoom-in slide-in-from-bottom-8 duration-500">
+        
+        {/* Colorful Header */}
+        <div className="h-40 bg-gradient-to-r from-[#D21E9D] via-[#FFB3D9] to-[#5A9DFC] p-8 flex items-center justify-center relative overflow-hidden">
+          <MusicalBackground />
+          <div className="absolute top-6 right-6 z-10">
+            <button onClick={onClose} className="p-2.5 bg-white/30 hover:bg-white/50 text-white rounded-full transition-all shadow-lg backdrop-blur-sm">
+              <X size={24} strokeWidth={3} />
+            </button>
+          </div>
+          <div className="relative z-10 flex flex-col items-center mt-4 text-center">
+            <div className="w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#D21E9D] mb-2 animate-bounce-subtle">
+              <Sparkles size={36} fill="currentColor" />
+            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-white font-baloo drop-shadow-md">Educação Infantil</h3>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-8 md:p-12 overflow-y-auto max-h-[70vh] bg-[#FDFDFD]">
+          <div className="text-center mb-8">
+            <h4 className="text-xl font-bold text-slate-800 font-baloo mb-2">Aprendizagem com propósito, celebração com sentido</h4>
+            <div className="w-24 h-1 bg-[#D21E9D] mx-auto rounded-full"></div>
+          </div>
+
+          <p className="text-slate-700 text-base md:text-lg leading-relaxed mb-8 font-medium">
+            Na Educação Infantil, cada atividade tem um objetivo claro, cada brincadeira é uma oportunidade de desenvolvimento e cada conquista é observada, registrada e celebrada. 
+            Nosso currículo, estruturado no sistema objetivo de ensino, define metas concretas para o desenvolvimento integral da criança de 3 a 6 anos, integrando:
+          </p>
+
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { 
+                  icon: MessageSquare, 
+                  color: "text-[#D21E9D]", 
+                  bg: "bg-[#D21E9D]/5", 
+                  title: "Competências linguísticas", 
+                  desc: "Exposição diária a sons, ritmos e vocabulário em português e japonês, com foco em compreensão auditiva, pronúncia clara e uso funcional da língua." 
+                },
+                { 
+                  icon: Heart, 
+                  color: "text-[#FFB3D9]", 
+                  bg: "bg-[#FFB3D9]/10", 
+                  title: "Desenvolvimento socioemocional", 
+                  desc: "Atividades colaborativas com metas coletivas, onde a criança aprende a compartilhar, esperar sua vez e expressar sentimentos com respeito — habilidades avaliadas continuamente." 
+                },
+                { 
+                  icon: Sun, 
+                  color: "text-[#FFD700]", 
+                  bg: "bg-[#FFD700]/10", 
+                  title: "Conexão com a Natureza", 
+                  desc: "Vivências ligadas às estações do ano com objetivos sensoriais, cognitivos e culturais específicos (ex: observação do Hanami, festivais rítmicos)." 
+                },
+                { 
+                  icon: Music, 
+                  color: "text-[#5A9DFC]", 
+                  bg: "bg-[#5A9DFC]/10", 
+                  title: "Estímulo musical intencional", 
+                  desc: "Canções bilíngues não são apenas diversão — são ferramentas para treinar discriminação auditiva, memória sequencial e coordenação motora, com progressão mensurável." 
+                },
+              ].map((item, i) => (
+                <div key={i} className={`${item.bg} p-6 rounded-[30px] border border-transparent hover:border-slate-200 transition-all`}>
+                  <div className="flex gap-4 items-start">
+                    <div className={`shrink-0 ${item.color} mt-1 p-3 bg-white rounded-2xl shadow-sm`}>
+                      <item.icon size={24} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <h5 className="font-black text-slate-800 text-lg mb-1">{item.title}</h5>
+                      <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12 bg-white p-8 rounded-[40px] border-2 border-slate-100 shadow-sm relative overflow-hidden">
+             <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Trophy size={60} />
+             </div>
+             <p className="text-slate-700 font-medium leading-relaxed relative z-10">
+              Tudo isso ocorre em um ambiente acolhedor, previsível e rico em estímulos, onde a rotina oferece segurança e a avaliação acontece de forma natural — por meio da observação contínua, registros descritivos e feedbacks visuais (como selos de conquista, painéis de progresso e celebrações coletivas).
+              <br/><br/>
+              <span className="text-slate-900 font-black text-lg block border-l-4 border-[#D21E9D] pl-4 italic">
+                "Porque nesta fase, brincar com intencionalidade é o caminho mais eficaz para construir as bases de uma criança confiante, curiosa e preparada para os desafios do Ensino Fundamental."
+              </span>
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center">
+          <button 
+            onClick={onClose}
+            className="hikari-btn-accent px-12 py-4 font-black shadow-lg"
+          >
+            Entendido!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EnsinoFundamentalModal = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-[500] bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-3xl rounded-[40px] shadow-3xl overflow-hidden flex flex-col relative animate-in zoom-in slide-in-from-bottom-8 duration-500">
+        
+        {/* Colorful Header */}
+        <div className="h-40 bg-gradient-to-r from-[#4CAF50] via-[#60D394] to-[#5A9DFC] p-8 flex items-center justify-center relative overflow-hidden">
+          <MusicalBackground />
+          <div className="absolute top-6 right-6 z-10">
+            <button onClick={onClose} className="p-2.5 bg-white/30 hover:bg-white/50 text-white rounded-full transition-all shadow-lg backdrop-blur-sm">
+              <X size={24} strokeWidth={3} />
+            </button>
+          </div>
+          <div className="relative z-10 flex flex-col items-center mt-4 text-center">
+            <div className="w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#4CAF50] mb-2 animate-bounce-subtle">
+              <BookOpen size={36} fill="currentColor" />
+            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-white font-baloo drop-shadow-md">Ensino Fundamental</h3>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-8 md:p-12 overflow-y-auto max-h-[70vh] bg-[#FDFDFD]">
+          <div className="text-center mb-8">
+            <h4 className="text-xl font-bold text-slate-800 font-baloo mb-2">Construção sólida, pensamento crítico e pertencimento cultural</h4>
+            <div className="w-24 h-1 bg-[#4CAF50] mx-auto rounded-full"></div>
+          </div>
+
+          <p className="text-slate-700 text-base md:text-lg leading-relaxed mb-8 font-medium">
+            No Ensino Fundamental, cada aluno é guiado por um currículo estruturado em objetivos mensuráveis, onde o conhecimento não é apenas transmitido — é construído, avaliado e celebrado com clareza e intencionalidade.
+            <br/><br/>
+            Nosso sistema objetivo de ensino define, mês a mês, metas concretas de aprendizagem em todas as áreas — <span className="text-[#4CAF50] font-black">Língua Portuguesa, Matemática, Ciências, História, Geografia e Língua Japonesa</span> — garantindo que nenhuma lacuna se acumule e que todo progresso seja visível para a família.
+          </p>
+
+          <div className="space-y-6">
+            <h5 className="font-black text-[#4CAF50] text-sm uppercase tracking-widest mb-4">Como isso acontece na prática?</h5>
+            
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { 
+                  icon: Target, 
+                  color: "text-[#4CAF50]", 
+                  bg: "bg-[#4CAF50]/5", 
+                  title: "Avaliação formativa contínua", 
+                  desc: "Atividades diagnósticas, formativas e somativas permitem ajustar o ritmo de cada aluno, respeitando seu tempo sem perder de vista a meta acadêmica." 
+                },
+                { 
+                  icon: Users, 
+                  color: "text-[#5A9DFC]", 
+                  bg: "bg-[#5A9DFC]/10", 
+                  title: "Desenvolvimento socioemocional intencional", 
+                  desc: "Habilidades como colaboração, resolução de conflitos, autoconfiança e empatia são trabalhadas em situações reais de sala de aula, com metas observáveis e feedback descritivo." 
+                },
+                { 
+                  icon: MessageSquare, 
+                  color: "text-[#D21E9D]", 
+                  bg: "bg-[#D21E9D]/5", 
+                  title: "Língua japonesa funcional", 
+                  desc: "O japonês não é ensinado apenas como disciplina, mas como ferramenta de comunicação — com ênfase em situações do cotidiano escolar e familiar (saudações, pedidos, descrição de rotinas)." 
+                },
+              ].map((item, i) => (
+                <div key={i} className={`${item.bg} p-6 rounded-[30px] border border-transparent hover:border-slate-200 transition-all shadow-sm`}>
+                  <div className="flex gap-5 items-start">
+                    <div className={`shrink-0 ${item.color} mt-1 p-3 bg-white rounded-2xl shadow-sm`}>
+                      <item.icon size={26} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <h5 className="font-black text-slate-800 text-lg mb-1">{item.title}</h5>
+                      <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12 bg-slate-50 p-8 rounded-[40px] border-2 border-slate-100 relative overflow-hidden">
+             <div className="absolute bottom-0 right-0 p-4 opacity-5">
+                <Lightbulb size={120} />
+             </div>
+             <p className="text-slate-700 font-medium leading-relaxed relative z-10">
+              Tudo isso ocorre em um ambiente organizado, previsível e acolhedor, onde a criança sabe o que se espera dela, entende seu progresso e sente-se segura para errar, perguntar e crescer.
+              <br/><br/>
+              <span className="text-slate-900 font-black text-xl block border-l-4 border-[#4CAF50] pl-5 italic mt-4">
+                "Porque nesta fase, dominar o conhecimento não é decorar respostas — é saber fazer perguntas, buscar soluções e sentir-se capaz de contribuir para o mundo."
+              </span>
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center">
+          <button 
+            onClick={onClose}
+            className="hikari-btn-primary px-14 py-4 font-black shadow-lg"
+          >
+            Entendido!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EnsinoMedioModal = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-[500] bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-4xl rounded-[40px] shadow-3xl overflow-hidden flex flex-col relative animate-in zoom-in slide-in-from-bottom-8 duration-500">
+        
+        {/* Golden/Yellow Header */}
+        <div className="h-40 bg-gradient-to-r from-[#FFD700] via-[#FFB3D9] to-[#D21E9D] p-8 flex items-center justify-center relative overflow-hidden">
+          <MusicalBackground />
+          <div className="absolute top-6 right-6 z-10">
+            <button onClick={onClose} className="p-2.5 bg-white/30 hover:bg-white/50 text-white rounded-full transition-all shadow-lg backdrop-blur-sm">
+              <X size={24} strokeWidth={3} />
+            </button>
+          </div>
+          <div className="relative z-10 flex flex-col items-center mt-4 text-center">
+            <div className="w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#FFD700] mb-2 animate-bounce-subtle">
+              <GraduationCap size={36} fill="currentColor" />
+            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-white font-baloo drop-shadow-md">Ensino Médio</h3>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-8 md:p-12 overflow-y-auto max-h-[70vh] bg-[#FDFDFD]">
+          <div className="text-center mb-10">
+            <h4 className="text-xl font-bold text-slate-800 font-baloo mb-2">Aprendizagem com metas claras, avaliação contínua e foco em resultados</h4>
+            <div className="w-24 h-1 bg-[#FFD700] mx-auto rounded-full"></div>
+          </div>
+
+          <p className="text-slate-700 text-base md:text-lg leading-relaxed mb-10 font-medium">
+            No Ensino Médio, nosso compromisso é com a formação acadêmica sólida, mensurável e orientada por objetivos específicos. Adotamos o <span className="text-[#D21E9D] font-black">Sistema Objetivo de Ensino</span>, no qual todo o currículo é estruturado em metas de aprendizagem explícitas, sequenciais e avaliáveis, garantindo que nenhum conteúdo essencial seja negligenciado.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <h5 className="font-black text-[#D21E9D] text-sm uppercase tracking-widest flex items-center gap-2">
+                <Target size={18} /> Como funciona na prática?
+              </h5>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    title: "Avaliação Diagnóstica e Formativa", 
+                    desc: "Identificamos lacunas de aprendizado em tempo real, permitindo intervenções pedagógicas precisas antes que as dúvidas se acumulem." 
+                  },
+                  { 
+                    title: "Metas de Aprendizagem Mensais", 
+                    desc: "Alunos e famílias sabem exatamente o que será ensinado, o que se espera que o aluno domine e como será avaliado." 
+                  },
+                  { 
+                    title: "Feedback Descritivo", 
+                    desc: "Além de notas, oferecemos devolutivas que apontam caminhos para a melhoria contínua e celebram conquistas específicas." 
+                  }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#D21E9D]/10 text-[#D21E9D] flex items-center justify-center shrink-0 mt-1 font-bold text-xs">
+                      {i + 1}
+                    </div>
+                    <div>
+                      <h6 className="font-bold text-slate-800">{item.title}</h6>
+                      <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-8 rounded-[30px] border border-slate-100">
+              <h5 className="font-black text-[#5A9DFC] text-sm uppercase tracking-widest flex items-center gap-2 mb-6">
+                <Rocket size={18} /> Diferenciais
+              </h5>
+              
+              <ul className="space-y-4">
+                {[
+                  "Foco em exames vestibulares e certificações",
+                  "Orientação vocacional integrada",
+                  "Projetos interdisciplinares práticos",
+                  "Suporte emocional para a fase adolescente"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
+                    <CheckCircle2 size={18} className="text-[#60D394] shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div className="w-10 h-10 bg-[#FFD700]/10 rounded-full flex items-center justify-center text-[#FFD700]">
+                  <Trophy size={20} />
+                </div>
+                <p className="text-xs text-slate-500 font-medium italic">
+                  "Preparando jovens não apenas para provas, mas para a vida."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center">
+          <button 
+            onClick={onClose}
+            className="hikari-btn-primary px-14 py-4 font-black shadow-lg"
+          >
+            Entendido!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PlansSection = ({ onSelectPlan }: { onSelectPlan: (plan: 'mensal' | 'anual') => void }) => {
+  return (
+    <section className="py-24 relative overflow-hidden">
+      <div className="container mx-auto px-4">
+        <SectionTitle 
+          title="Investimento no Futuro" 
+          subtitle="Escolha o plano ideal para a jornada bilíngue do seu filho."
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Plano Mensal */}
+          <div className="bg-white p-8 rounded-[40px] shadow-lg border border-slate-100 flex flex-col relative hover:border-[#5DCCD6] transition-colors">
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold font-baloo text-slate-800">Plano Mensal</h3>
+              <p className="text-slate-500">Flexibilidade total</p>
+            </div>
+            <div className="mb-8">
+              <span className="text-5xl font-black text-slate-900">¥500</span>
+              <span className="text-slate-400 font-bold">/mês</span>
+            </div>
+            <ul className="space-y-4 mb-10 flex-grow">
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#5DCCD6] shrink-0" size={20} />
+                Acesso a 1 música por mês
+              </li>
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#5DCCD6] shrink-0" size={20} />
+                Material Impresso
+              </li>
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#5DCCD6] shrink-0" size={20} />
+                Certificado Digital de Conquista
+              </li>
+            </ul>
+            <button 
+              onClick={() => onSelectPlan('mensal')}
+              className="w-full py-5 rounded-full font-bold text-slate-800 border-4 border-slate-100 hover:bg-slate-50 transition-all flex items-center justify-center gap-2 group"
+            >
+              Começar Mensal <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+
+          {/* Plano Anual */}
+          <div className="bg-white p-8 rounded-[40px] shadow-2xl border-4 border-[#FFD700] flex flex-col relative scale-105 z-10">
+            <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg">
+              <Star size={12} fill="currentColor" /> Recomendado por 80% das famílias
+            </div>
+            
+            <div className="mb-8 flex justify-between items-start">
+              <div>
+                <h3 className="text-2xl font-bold font-baloo text-slate-800">Plano Anual</h3>
+                <p className="text-[#D21E9D] font-bold">Economize ¥1.000</p>
+              </div>
+              <div className="w-12 h-12 bg-[#FFD700]/20 rounded-2xl flex items-center justify-center text-[#FFD700]">
+                <Gift size={24} />
+              </div>
+            </div>
+            <div className="mb-8">
+              <span className="text-5xl font-black text-slate-900">¥5.000</span>
+              <span className="text-slate-400 font-bold">/ano</span>
+            </div>
+            <ul className="space-y-4 mb-10 flex-grow">
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#FFD700] shrink-0" size={20} />
+                Pode cancelar a qualquer momento
+              </li>
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#FFD700] shrink-0" size={20} />
+                Acesso a 1 música por mês
+              </li>
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#FFD700] shrink-0" size={20} />
+                Material Impresso
+              </li>
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#FFD700] shrink-0" size={20} />
+                Certificado Digital e Impresso de Conquista Mensal
+              </li>
+              <li className="flex items-start gap-3 text-slate-700 font-bold">
+                <CheckCircle2 className="text-[#FFD700] shrink-0" size={20} />
+                Acesso Prioritário ao “Chat do Kotoba Sensei”
+              </li>
+            </ul>
+            <button 
+              onClick={() => onSelectPlan('anual')}
+              className="hikari-btn-accent w-full py-6 font-black text-xl shadow-xl cta-pulse flex items-center justify-center gap-2"
+            >
+              QUERO O PLANO ANUAL <Zap size={20} fill="currentColor" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const MethodologyModal = ({ item, onClose }: { item: MethodologyDetail, onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-[300] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white w-full max-w-2xl rounded-[40px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div className={`${item.color} p-8 text-white relative`}>
+          <button onClick={onClose} className="absolute top-6 right-6 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all">
+            <X size={20} />
+          </button>
+          <div className="flex items-center gap-4 mb-4">
+            <item.icon size={48} className="drop-shadow-lg" />
+            <h3 className="text-3xl font-black font-baloo">{item.title}</h3>
+          </div>
+          <p className="text-white/90 font-medium text-lg">{item.description}</p>
+        </div>
+        
+        <div className="p-8 md:p-10 space-y-8 max-h-[70vh] overflow-y-auto">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-[#D21E9D]">
+              <Zap size={20} fill="currentColor" />
+              <h4 className="font-black uppercase tracking-widest text-sm">O que acontece?</h4>
+            </div>
+            <p className="text-slate-700 leading-relaxed font-medium">{item.copy}</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-indigo-500">
+              <Brain size={20} />
+              <h4 className="font-black uppercase tracking-widest text-sm">Base Científica</h4>
+            </div>
+            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 italic text-slate-600 text-sm leading-relaxed">
+              {item.scientificBase}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400">
+              <BookOpen size={20} />
+              <h4 className="font-black uppercase tracking-widest text-sm">Fontes Acadêmicas</h4>
+            </div>
+            <ul className="space-y-2">
+              {item.sources.map((source, i) => (
+                <li key={i} className="text-xs text-slate-400 font-medium list-disc ml-4">{source}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-end">
+          <button 
+            onClick={onClose}
+            className="px-8 py-3 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-all"
+          >
+            Entendido!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CheckoutPage = ({ initialPlan, onComplete, onCancel }: { initialPlan: string, onComplete: (data: any) => void, onCancel: () => void }) => {
+  const [plan, setPlan] = useState(initialPlan);
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+    onComplete({ ...data, plan });
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 pt-32 pb-12">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <button onClick={onCancel} className="flex items-center gap-2 text-slate-500 mb-8 font-bold hover:text-slate-800 transition-colors">
+          <ArrowLeft size={18} /> Voltar
+        </button>
+
+        <div className="bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-slate-100">
+          <div className="flex-1 p-8 md:p-12 bg-slate-50/50 border-r border-slate-100">
+            <h2 className="text-3xl font-black font-baloo text-slate-800 mb-8">Resumo da Assinatura</h2>
+            
+            <div className="space-y-4 mb-10">
+              <button 
+                onClick={() => setPlan('mensal')}
+                className={`w-full p-6 rounded-3xl border-4 transition-all flex justify-between items-center ${plan === 'mensal' ? 'border-[#5DCCD6] bg-white shadow-md' : 'border-transparent hover:bg-white/50'}`}
+              >
+                <div className="text-left">
+                  <span className="block font-bold text-slate-800">Mensal</span>
+                  <span className="text-sm text-slate-500">¥500/mês</span>
+                </div>
+                {plan === 'mensal' && <CheckCircle2 className="text-[#5DCCD6]" />}
+              </button>
+
+              <button 
+                onClick={() => setPlan('anual')}
+                className={`w-full p-6 rounded-3xl border-4 transition-all flex justify-between items-center ${plan === 'anual' ? 'border-[#FFD700] bg-white shadow-md' : 'border-transparent hover:bg-white/50'}`}
+              >
+                <div className="text-left">
+                  <span className="block font-bold text-slate-800">Anual <span className="text-[#D21E9D] text-xs ml-2">POPULAR</span></span>
+                  <span className="text-sm text-slate-500">¥5.000/ano</span>
+                </div>
+                {plan === 'anual' && <CheckCircle2 className="text-[#FFD700]" />}
+              </button>
+            </div>
+
+            <div className="space-y-4 pt-6 border-t border-slate-200">
+              <div className="flex items-center gap-3 text-slate-600 font-medium">
+                <Shield size={18} /> 
+                <span className="text-sm">Checkout Seguro & Criptografado</span>
+              </div>
+              <div className="flex items-center gap-3 text-slate-600 font-medium">
+                <Heart size={18} className="text-[#D21E9D]" /> 
+                <span className="text-sm">Assinatura Vitalícia da Aliança</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-[1.2] p-8 md:p-12">
+            <h3 className="text-2xl font-bold font-baloo mb-8">Pronto para começar a jornada musical?</h3>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-500 ml-2">Nome da criança</label>
+                  <input required name="childName" type="text" placeholder="Ex: Hikari" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-500 ml-2">Idade (6–12 anos)</label>
+                  <input required name="age" type="number" min="6" max="12" placeholder="Ex: 8" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-500 ml-2">Nome do responsável (Completo)</label>
+                <input required name="parentName" type="text" placeholder="Nome Completo do Responsável" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all" />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-500 ml-2">Endereço completo no Japão (para envio do material)</label>
+                <textarea 
+                  required 
+                  name="address" 
+                  rows={3} 
+                  placeholder="〒 000-0000 | Endereço completo..." 
+                  className="w-full p-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all resize-none"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-500 ml-2">WhatsApp para contato</label>
+                <input required name="whatsapp" type="tel" placeholder="090-0000-0000" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all" />
+              </div>
+
+              <button 
+                type="submit"
+                className="hikari-btn-accent w-full py-5 font-black text-lg shadow-xl mt-4 flex items-center justify-center gap-2"
+              >
+                <Lock size={18} /> CONFIRMAR INSCRIÇÃO
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WelcomePage = ({ userData }: { userData: any }) => {
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+      <div className="bg-white max-w-lg w-full rounded-[40px] shadow-2xl p-10 text-center border-4 border-[#60D394] relative overflow-hidden animate-in zoom-in duration-500">
+        <MusicalBackground />
+        
+        <div className="w-24 h-24 bg-[#60D394] rounded-full flex items-center justify-center mx-auto mb-8 text-white shadow-lg animate-bounce-subtle relative z-10">
+          <CheckCircle2 size={48} />
+        </div>
+
+        <h2 className="text-4xl font-black font-baloo text-slate-800 mb-4 relative z-10">Bem-vindo(a), {userData.childName}!</h2>
+        <p className="text-slate-600 text-lg mb-8 relative z-10">
+          Sua inscrição no plano <strong className="text-[#D21E9D] uppercase">{userData.plan}</strong> foi confirmada com sucesso.
+          <br/><br/>
+          Em breve, você receberá no WhatsApp <strong>{userData.whatsapp}</strong> as instruções de acesso e o código de rastreio do seu material.
+        </p>
+
+        <div className="bg-slate-50 p-6 rounded-3xl border-2 border-dashed border-slate-200 mb-8 relative z-10">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Próximos Passos</p>
+          <ol className="text-left space-y-3 text-slate-700 font-medium text-sm">
+            <li className="flex gap-2"><span className="text-[#60D394] font-black">1.</span> Aguarde nosso contato no WhatsApp</li>
+            <li className="flex gap-2"><span className="text-[#60D394] font-black">2.</span> Acesse a plataforma de alunos</li>
+            <li className="flex gap-2"><span className="text-[#60D394] font-black">3.</span> Receba seu kit em casa</li>
+          </ol>
+        </div>
+
+        <button 
+          onClick={() => window.location.reload()}
+          className="hikari-btn-primary w-full py-4 font-black relative z-10"
+        >
+          Voltar ao Início
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const Dashboard = ({ onClose }: { onClose: () => void }) => {
+  const [stats, setStats] = useState(getStats());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(getStats());
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[1000] bg-slate-100 flex flex-col animate-in slide-in-from-bottom duration-300">
+      <nav className="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white">
+            <BarChart3 size={20} />
+          </div>
+          <span className="font-black text-xl tracking-tight text-slate-900">Hikari Admin</span>
+        </div>
+        <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+          <X size={24} />
+        </button>
+      </nav>
+
+      <div className="flex-grow overflow-y-auto bg-slate-50/50 p-8 md:p-12">
+        <div className="max-w-6xl mx-auto">
+          <header className="mb-12">
+            <h1 className="text-3xl font-black text-slate-900 mb-2">Visão Geral do Negócio</h1>
+            <p className="text-slate-500 font-medium">Acompanhe as métricas de conversão e acessos em tempo real.</p>
+          </header>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 flex flex-col justify-between">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center">
+                  <BarChart3 size={28} />
+                </div>
+                <div className="px-3 py-1 bg-green-100 text-green-600 text-[10px] font-black rounded-full uppercase">Realtime</div>
+              </div>
+              <div>
+                <span className="text-slate-400 text-xs font-bold uppercase tracking-widest block mb-1">Total de Acessos</span>
+                <span className="text-5xl font-black text-slate-900">{stats.visits}</span>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 flex flex-col justify-between">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center">
+                  <Users size={28} />
+                </div>
+              </div>
+              <div>
+                <span className="text-slate-400 text-xs font-bold uppercase tracking-widest block mb-1">Cadastros Iniciados</span>
+                <span className="text-5xl font-black text-slate-900">{stats.initiated}</span>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-[40px] shadow-lg border-2 border-[#60D394] flex flex-col justify-between">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-14 h-14 bg-[#60D394]/20 text-[#60D394] rounded-2xl flex items-center justify-center">
+                  <CheckCircle2 size={28} />
+                </div>
+                <TrendingUp size={24} className="text-[#60D394]" />
+              </div>
+              <div>
+                <span className="text-slate-400 text-xs font-bold uppercase tracking-widest block mb-1">Inscrições Concluídas</span>
+                <span className="text-5xl font-black text-slate-900">{stats.completed}</span>
+              </div>
+            </div>
+          </div>
+
+          <section className="mb-12">
+            <div className="flex items-center gap-2 mb-6">
+              <ClipboardList size={24} className="text-slate-400" />
+              <h2 className="text-2xl font-black text-slate-900">Base de Assinantes</h2>
+            </div>
+            
+            {stats.subscribers.length === 0 ? (
+              <div className="bg-white p-12 rounded-[40px] text-center border-2 border-dashed border-slate-200">
+                <p className="text-slate-400 font-bold">Nenhum assinante cadastrado ainda.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {stats.subscribers.map((sub) => (
+                  <div key={sub.id} className="bg-white p-6 md:p-8 rounded-[30px] shadow-sm border border-slate-100 flex flex-col md:flex-row gap-6 md:items-center justify-between group hover:border-[#5DCCD6] transition-colors">
+                    <div className="flex-1 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-[#5DCCD6]/10 text-[#5DCCD6] rounded-full flex items-center justify-center">
+                          <Baby size={20} />
+                        </div>
+                        <div>
+                          <h4 className="font-black text-slate-900">{sub.childName} ({sub.age} anos)</h4>
+                          <p className="text-xs font-bold text-slate-400 uppercase">Responsável: {sub.parentName}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2 text-sm text-slate-600">
+                        <MapPin size={16} className="shrink-0 mt-1 text-[#D21E9D]" />
+                        <span className="italic leading-snug">{sub.address}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col md:items-end gap-3 shrink-0">
+                      <div className="flex gap-2">
+                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${sub.plan === 'anual' ? 'bg-[#FFD700] text-slate-900' : 'bg-slate-900 text-white'}`}>
+                          {sub.plan}
+                        </span>
+                        <a href={`https://wa.me/${sub.whatsapp.replace(/\D/g,'')}`} target="_blank" className="flex items-center gap-1.5 px-4 py-1.5 bg-[#25D366] text-white text-[10px] font-black rounded-full uppercase transition-transform hover:scale-105">
+                          <MessageSquare size={12} fill="currentColor" /> WhatsApp
+                        </a>
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-400">{sub.date}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+               <h3 className="text-lg font-bold mb-8 flex items-center gap-2">
+                 <Calendar className="text-slate-400" size={20} /> Histórico do Servidor
+               </h3>
+               <div className="space-y-6">
+                  <div className="flex justify-between items-center pb-4 border-b border-slate-50">
+                    <span className="text-slate-500 font-medium">Última inscrição</span>
+                    <span className="font-bold text-slate-900">{stats.lastDate}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500 font-medium">Status do Sistema</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs font-bold text-green-600 uppercase">Online & Seguro</span>
+                    </div>
+                  </div>
+               </div>
+            </div>
+
+            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+               <h3 className="text-lg font-bold mb-8 flex items-center gap-2">
+                 <Zap className="text-[#FFD700]" size={20} fill="currentColor" /> Performance de Planos
+               </h3>
+               <div className="flex items-center justify-center py-4">
+                  <div className="text-center">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Plano Mais Escolhido</span>
+                    <span className={`text-2xl font-black px-6 py-2 rounded-full ${stats.mostPopular === 'Anual' ? 'bg-[#FFD700] text-slate-900' : 'bg-[#5DCCD6] text-white'}`}>
+                      {stats.mostPopular}
+                    </span>
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- App Root ---
+
+export default function App() {
+  const [view, setView] = useState<'landing' | 'checkout' | 'welcome' | 'eoi'>('landing');
+  const [selectedPlan, setSelectedPlan] = useState<'mensal' | 'anual'>('anual');
+  const [userData, setUserData] = useState<any>(null);
+  
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  // Modal States
+  const [selectedMethodology, setSelectedMethodology] = useState<MethodologyDetail | null>(null);
+  const [showCreche, setShowCreche] = useState(false);
+  const [showEducacaoInfantil, setShowEducacaoInfantil] = useState(false);
+  const [showEnsinoFundamental, setShowEnsinoFundamental] = useState(false);
+  const [showEnsinoMedio, setShowEnsinoMedio] = useState(false);
+
+  useEffect(() => {
+    updateStats('visit');
+  }, []);
+
+  const handleStartCheckout = (plan: 'mensal' | 'anual') => {
+    updateStats('registration_initiated');
+    setSelectedPlan(plan);
+    setView('checkout');
+  };
+
+  const handleCompletePurchase = (data: any) => {
+    updateStats('subscription_completed', data);
+    setUserData(data);
+    setView('welcome');
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
+
+  return (
+    <div className="min-h-screen">
+      {/* Admin Button */}
+      <button 
+        onClick={() => setShowDashboard(true)}
+        className="fixed bottom-4 left-4 z-50 p-2 bg-white/50 backdrop-blur hover:bg-white rounded-full text-slate-400 hover:text-slate-800 transition-all shadow-sm border border-slate-200"
+        title="Admin Dashboard"
       >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
+        <Lock size={16} />
+      </button>
+
+      {/* Views */}
+      {view === 'landing' && (
+        <div className="bg-white">
+          {/* Hero Section */}
+          <header className="relative min-h-[90vh] flex flex-col items-center justify-center p-6 overflow-hidden bg-gradient-to-b from-[#E0F7FA] via-[#F0F4F8] to-white">
+            <SakuraBackground />
+            <MusicalBackground />
+            
+            <nav className="absolute top-0 w-full p-6 flex justify-between items-center max-w-7xl mx-auto z-10">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg rotate-3">
+                  <Music size={24} strokeWidth={3} />
+                </div>
+                <span className="font-baloo font-black text-2xl text-slate-800 tracking-tight">Hikari Melodia</span>
+              </div>
+              <button 
+                onClick={() => handleStartCheckout('mensal')}
+                className="px-6 py-2.5 rounded-full bg-white text-slate-900 font-bold text-sm shadow-md hover:shadow-lg transition-all border border-slate-100 hidden md:block"
+              >
+                Área do Aluno
+              </button>
+            </nav>
+
+            <div className="relative z-10 text-center max-w-4xl mx-auto mt-10">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-slate-200 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <Sparkles size={16} className="text-[#FFD700]" />
+                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Método Exclusivo em Iwata</span>
+              </div>
+              
+              <h1 className="text-h1 font-black text-slate-900 mb-6 leading-tight drop-shadow-sm">
+                Seu filho aprendendo <span className="text-[#5DCCD6]">Japonês</span><br />
+                através da <span className="text-[#D21E9D] relative inline-block">
+                  Música
+                  <svg className="absolute w-full h-3 -bottom-1 left-0 text-[#D21E9D]/30" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" />
+                  </svg>
+                </span>
+              </h1>
+              
+              <p className="text-body text-slate-600 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
+                Transformamos a barreira do idioma em uma ponte sonora. 
+                Uma metodologia neurocientífica que usa ritmo e melodia para destravar a fala e a confiança de crianças brasileiras no Japão.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button 
+                  onClick={() => handleStartCheckout('anual')}
+                  className="hikari-btn-primary px-8 py-4 text-lg font-bold flex items-center gap-3 group"
+                >
+                  Começar Agora <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button className="px-8 py-4 rounded-[30px] font-bold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
+                  <Play size={20} className="text-[#5DCCD6] fill-current" /> Ver como funciona
+                </button>
+              </div>
+            </div>
+
+            {/* Floating Cards (Decorative) */}
+            <div className="absolute top-1/4 left-[5%] hidden lg:block animate-bounce-subtle" style={{ animationDelay: '1s' }}>
+               <div className="bg-white p-4 rounded-3xl shadow-xl rotate-[-6deg] max-w-[200px]">
+                 <div className="flex items-center gap-3 mb-2">
+                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                     <Brain size={16} />
+                   </div>
+                   <span className="font-bold text-xs text-slate-800">Neurociência</span>
+                 </div>
+                 <p className="text-[10px] text-slate-500 leading-tight">Estímulo direto ao córtex auditivo.</p>
+               </div>
+            </div>
+
+            <div className="absolute bottom-1/4 right-[5%] hidden lg:block animate-bounce-subtle" style={{ animationDelay: '2s' }}>
+               <div className="bg-white p-4 rounded-3xl shadow-xl rotate-[6deg] max-w-[200px]">
+                 <div className="flex items-center gap-3 mb-2">
+                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
+                     <Smile size={16} />
+                   </div>
+                   <span className="font-bold text-xs text-slate-800">Sem Tédio</span>
+                 </div>
+                 <p className="text-[10px] text-slate-500 leading-tight">Aprender brincando é mais eficaz.</p>
+               </div>
+            </div>
+          </header>
+
+          {/* Methodology Section */}
+          <section className="py-24 bg-white relative">
+            <div className="container mx-auto px-4">
+              <SectionTitle 
+                title="Por que a Música?" 
+                subtitle="Não é mágica, é ciência. Entenda como nosso método ativa áreas do cérebro que o ensino tradicional ignora."
+              />
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+                {METHODOLOGY_DATA.map((item) => (
+                  <div key={item.id} onClick={() => setSelectedMethodology(item)}>
+                    <ClayIcon icon={item.icon} color={item.color} label={item.title} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Levels Section */}
+          <section className="py-24 bg-slate-50">
+             <div className="container mx-auto px-4">
+                <SectionTitle 
+                  title="Uma Jornada Completa" 
+                  subtitle="Do berçário à universidade, acompanhamos cada fase do desenvolvimento."
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Card Creche */}
+                  <div 
+                    onClick={() => setShowCreche(true)}
+                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+                  >
+                    <div className="w-14 h-14 bg-[#5A9DFC]/10 text-[#5A9DFC] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <Baby size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Creche</h3>
+                    <p className="text-sm text-slate-500 font-medium mb-4">0 a 3 anos</p>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Cuidado, afeto e estímulos sensoriais para os primeiros passos.</p>
+                    <span className="text-[#5A9DFC] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Saiba mais <ArrowRight size={16} />
+                    </span>
+                  </div>
+
+                  {/* Card Educação Infantil */}
+                  <div 
+                    onClick={() => setShowEducacaoInfantil(true)}
+                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+                  >
+                    <div className="w-14 h-14 bg-[#D21E9D]/10 text-[#D21E9D] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <Sparkles size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Educação Infantil</h3>
+                    <p className="text-sm text-slate-500 font-medium mb-4">3 a 6 anos</p>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Descoberta do mundo, socialização e introdução lúdica ao japonês.</p>
+                    <span className="text-[#D21E9D] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Saiba mais <ArrowRight size={16} />
+                    </span>
+                  </div>
+
+                  {/* Card Ensino Fundamental */}
+                  <div 
+                    onClick={() => setShowEnsinoFundamental(true)}
+                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+                  >
+                    <div className="w-14 h-14 bg-[#4CAF50]/10 text-[#4CAF50] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <BookOpen size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Ensino Fundamental</h3>
+                    <p className="text-sm text-slate-500 font-medium mb-4">6 a 14 anos</p>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Base acadêmica sólida com o Sistema Objetivo de Ensino.</p>
+                    <span className="text-[#4CAF50] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Saiba mais <ArrowRight size={16} />
+                    </span>
+                  </div>
+
+                  {/* Card Ensino Médio */}
+                  <div 
+                    onClick={() => setShowEnsinoMedio(true)}
+                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+                  >
+                    <div className="w-14 h-14 bg-[#FFD700]/10 text-[#FFD700] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <GraduationCap size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Ensino Médio</h3>
+                    <p className="text-sm text-slate-500 font-medium mb-4">15 a 17 anos</p>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Preparação intensiva para o futuro, vestibulares e carreira.</p>
+                    <span className="text-[#FFD700] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Saiba mais <ArrowRight size={16} />
+                    </span>
+                  </div>
+                </div>
+             </div>
+          </section>
+
+          {/* Gallery Section */}
+          <section className="py-12 bg-white">
+            <div className="container mx-auto px-4">
+              <SectionTitle 
+                title="Momentos Hikari" 
+                subtitle="Um pouco do nosso dia a dia em imagens."
+              />
+            </div>
+            <ImageCarousel images={PRESENTATION_IMAGES} />
+          </section>
+
+          {/* Pricing Section */}
+          <PlansSection onSelectPlan={handleStartCheckout} />
+
+          {/* Footer */}
+          <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
+            <div className="container mx-auto px-4 text-center">
+              <div className="flex items-center justify-center gap-2 mb-8">
+                <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg">
+                  <Music size={24} strokeWidth={3} />
+                </div>
+                <span className="font-baloo font-black text-2xl tracking-tight">Hikari Melodia</span>
+              </div>
+              <p className="text-slate-500 text-sm mb-8">
+                Escola Objetivo de Iwata - Educação com Amor e Propósito.
+                <br/>Transformando vidas através da educação bilíngue.
+              </p>
+              <div className="flex justify-center gap-6 text-slate-400 text-sm font-medium">
+                <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
+                <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+                <a href="#" className="hover:text-white transition-colors">Contato</a>
+              </div>
+              <p className="text-slate-700 text-xs mt-12">
+                © 2024 Hikari Melodia. Todos os direitos reservados.
+              </p>
+            </div>
+          </footer>
+        </div>
+      )}
+
+      {view === 'checkout' && (
+        <CheckoutPage 
+          initialPlan={selectedPlan} 
+          onComplete={handleCompletePurchase}
+          onCancel={() => setView('landing')}
+        />
+      )}
+
+      {view === 'welcome' && userData && (
+        <WelcomePage userData={userData} />
+      )}
+
+      {/* Modals */}
+      {selectedMethodology && (
+        <MethodologyModal item={selectedMethodology} onClose={() => setSelectedMethodology(null)} />
+      )}
+
+      {showCreche && <CrecheModal onClose={() => setShowCreche(false)} />}
+      {showEducacaoInfantil && <EducacaoInfantilModal onClose={() => setShowEducacaoInfantil(false)} />}
+      {showEnsinoFundamental && <EnsinoFundamentalModal onClose={() => setShowEnsinoFundamental(false)} />}
+      {showEnsinoMedio && <EnsinoMedioModal onClose={() => setShowEnsinoMedio(false)} />}
+
+      {showDashboard && <Dashboard onClose={() => setShowDashboard(false)} />}
+    </div>
   );
 }
-
-export default App;
