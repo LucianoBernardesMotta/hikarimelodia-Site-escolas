@@ -129,7 +129,6 @@ const METHODOLOGY_DATA: MethodologyDetail[] = [
 ];
 
 const PRESENTATION_IMAGES = [
-  "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1974&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=2040&auto=format&fit=crop",
@@ -994,22 +993,21 @@ const CheckoutPage = ({ initialPlan, onComplete, onCancel }: { initialPlan: stri
                   required 
                   name="address" 
                   rows={3} 
-                  placeholder="〒 000-0000 | Endereço completo..." 
+                  placeholder="〒000-0000 Província, Cidade, Bairro, Prédio/Casa, Apto" 
                   className="w-full p-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all resize-none"
-                />
+                ></textarea>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-500 ml-2">WhatsApp para contato</label>
-                <input required name="whatsapp" type="tel" placeholder="090-0000-0000" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all" />
+                <label className="text-sm font-bold text-slate-500 ml-2">WhatsApp (para notificações de entrega)</label>
+                <input required name="whatsapp" type="tel" placeholder="+81 00-0000-0000" className="w-full h-14 px-5 rounded-2xl border-2 border-slate-100 focus:border-[#5DCCD6] outline-none font-medium transition-all" />
               </div>
 
-              <button 
-                type="submit"
-                className="hikari-btn-accent w-full py-5 font-black text-lg shadow-xl mt-4 flex items-center justify-center gap-2"
-              >
-                <Lock size={18} /> CONFIRMAR INSCRIÇÃO
-              </button>
+              <div className="pt-4 space-y-4">
+                <button type="submit" className="hikari-btn-accent w-full py-6 font-black text-xl shadow-xl flex items-center justify-center gap-2">
+                  FINALIZAR ASSINATURA <ChevronRight size={24} />
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -1019,37 +1017,82 @@ const CheckoutPage = ({ initialPlan, onComplete, onCancel }: { initialPlan: stri
 };
 
 const WelcomePage = ({ userData }: { userData: any }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="bg-white max-w-lg w-full rounded-[40px] shadow-2xl p-10 text-center border-4 border-[#60D394] relative overflow-hidden animate-in zoom-in duration-500">
-        <MusicalBackground />
-        
-        <div className="w-24 h-24 bg-[#60D394] rounded-full flex items-center justify-center mx-auto mb-8 text-white shadow-lg animate-bounce-subtle relative z-10">
+    <div className="min-h-screen bg-white pt-32 pb-24">
+      <div className="container mx-auto px-4 max-w-4xl text-center">
+        <div className="w-24 h-24 bg-[#60D394] rounded-full flex items-center justify-center text-white mx-auto mb-8 shadow-2xl scale-110 animate-bounce">
           <CheckCircle2 size={48} />
         </div>
+        
+        <h1 className="text-h1 text-slate-800 mb-4">Seja bem-vindo, {userData.childName}!</h1>
+        <p className="text-xl text-slate-500 font-medium mb-12">O primeiro passo na Aliança Melódica foi dado.</p>
 
-        <h2 className="text-4xl font-black font-baloo text-slate-800 mb-4 relative z-10">Bem-vindo(a), {userData.childName}!</h2>
-        <p className="text-slate-600 text-lg mb-8 relative z-10">
-          Sua inscrição no plano <strong className="text-[#D21E9D] uppercase">{userData.plan}</strong> foi confirmada com sucesso.
-          <br/><br/>
-          Em breve, você receberá no WhatsApp <strong>{userData.whatsapp}</strong> as instruções de acesso e o código de rastreio do seu material.
-        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+          <div className="bg-slate-50 p-8 rounded-[40px] border-2 border-slate-100 flex flex-col justify-center text-left">
+            <h3 className="text-sm font-black text-[#D21E9D] uppercase tracking-widest mb-4">Sua Primeira Missão</h3>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 bg-[#5DCCD6] rounded-2xl flex items-center justify-center text-white shadow-lg">
+                <Music size={32} />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold font-baloo">Dia Feliz com Hikari</h4>
+                <p className="text-sm text-slate-500 font-medium italic">Fase 1: Saudações Iniciais</p>
+              </div>
+            </div>
+            
+            <div className="bg-white p-6 rounded-3xl shadow-sm space-y-4">
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className={`h-full bg-[#5DCCD6] transition-all duration-1000 ${isPlaying ? 'w-1/2' : 'w-0'}`}></div>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-bold text-slate-400">01:14</span>
+                <button 
+                  onClick={() => setIsPlaying(!isPlaying)}
+                  className="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white shadow-xl hover:scale-105 transition-transform"
+                >
+                  {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
+                </button>
+                <span className="text-[10px] font-bold text-slate-400">02:45</span>
+              </div>
+            </div>
+          </div>
 
-        <div className="bg-slate-50 p-6 rounded-3xl border-2 border-dashed border-slate-200 mb-8 relative z-10">
-          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Próximos Passos</p>
-          <ol className="text-left space-y-3 text-slate-700 font-medium text-sm">
-            <li className="flex gap-2"><span className="text-[#60D394] font-black">1.</span> Aguarde nosso contato no WhatsApp</li>
-            <li className="flex gap-2"><span className="text-[#60D394] font-black">2.</span> Acesse a plataforma de alunos</li>
-            <li className="flex gap-2"><span className="text-[#60D394] font-black">3.</span> Receba seu kit em casa</li>
-          </ol>
+          <div className="bg-slate-50 p-8 rounded-[40px] border-2 border-slate-100 flex flex-col items-center justify-center text-center">
+            <div className="bg-white p-4 rounded-3xl shadow-xl mb-6">
+              <QrCode size={120} className="text-slate-800" />
+            </div>
+            <h4 className="font-bold text-lg mb-2">Instale o HikariApp</h4>
+            <p className="text-sm text-slate-500 font-medium mb-6">Escaneie para entrar no mundo <br/> mágico da Aliança Melódica.</p>
+            <div className="flex gap-2">
+              <div className="px-4 py-2 bg-slate-200 rounded-full text-[10px] font-black uppercase">App Store</div>
+              <div className="px-4 py-2 bg-slate-200 rounded-full text-[10px] font-black uppercase">Google Play</div>
+            </div>
+          </div>
         </div>
 
-        <button 
-          onClick={() => window.location.reload()}
-          className="hikari-btn-primary w-full py-4 font-black relative z-10"
-        >
-          Voltar ao Início
-        </button>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-3xl border-2 border-slate-100 flex items-center gap-4 text-left">
+            <div className="w-12 h-12 bg-[#FFD700]/20 rounded-2xl flex items-center justify-center text-[#FFD700]">
+              <Gift size={24} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-400">PRÊMIO FÍSICO</p>
+              <p className="text-sm font-bold text-slate-700">Entrega estimada: 5 dias úteis</p>
+              <p className="text-[10px] text-slate-400 mt-1 max-w-[150px] truncate">{userData.address}</p>
+            </div>
+          </div>
+          <button className="bg-[#25D366] p-6 rounded-3xl text-white flex items-center justify-center gap-3 font-bold hover:opacity-90 transition-all shadow-lg">
+            <MessageSquare size={24} /> Entrar no Grupo de Pais (WhatsApp)
+          </button>
+        </div>
+
+        <div className="mt-20">
+          <p className="text-2xl font-baloo text-slate-400 italic">
+            🎶 Seu filho já está na Aliança Melódica. A primeira nota começa agora.
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -1213,6 +1256,243 @@ const Dashboard = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
+const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCreche, setShowEducacaoInfantil, setShowEnsinoFundamental, setShowEnsinoMedio }: any) => {
+  return (
+    <div className="bg-[#FFFFFF]">
+      {/* SESSÃO 1 – HERO */}
+      <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#5DCCD6] via-[#4FBFD9] to-[#D21E9D]/20 overflow-hidden text-center lg:text-left">
+        <MusicalBackground />
+        
+        <nav className="absolute top-0 w-full p-6 flex justify-between items-center max-w-7xl mx-auto z-10 left-0 right-0">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg rotate-3">
+              <Music size={24} strokeWidth={3} />
+            </div>
+            <span className="font-baloo font-black text-2xl text-slate-800 tracking-tight">Hikari Melodia</span>
+          </div>
+          <button 
+            onClick={() => onStartCheckout('mensal')}
+            className="px-6 py-2.5 rounded-full bg-white text-slate-900 font-bold text-sm shadow-md hover:shadow-lg transition-all border border-slate-100 hidden md:block"
+          >
+            Área do Aluno
+          </button>
+        </nav>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FFD700] text-slate-800 text-sm font-black mb-10 shadow-lg uppercase tracking-wider mx-auto lg:mx-0">
+                <Music size={18} fill="currentColor" /> Educação Musical Inovadora
+              </div>
+              
+              <h1 className="text-h1 text-slate-800 mb-2 leading-tight drop-shadow-sm flex flex-col md:flex-row md:items-baseline gap-4 justify-center lg:justify-start">
+                Hikari <span className="text-4xl md:text-5xl font-nunito font-bold text-slate-700">メロディー</span>
+              </h1>
+              <h2 className="text-2xl md:text-3xl font-baloo text-slate-700/80 mb-8 font-bold">
+                Aprender Japonês Não Foi Nunca Tão Musical
+              </h2>
+              <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium mx-auto lg:mx-0">
+                Um programa estruturado, científico e profundamente afetivo que conecta música, neurociência e cultura japonesa.
+              </p>
+            </div>
+
+            <div className="flex-1 relative w-full max-w-xl">
+              <div className="relative z-10 rounded-[30px] overflow-hidden shadow-2xl border-[12px] border-white backdrop-blur-sm bg-white aspect-video">
+                <iframe 
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/tqrx49tVCdw?si=8ycO4HfJYjZIIFDi" 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <div className="absolute -top-10 -right-10 animate-bounce hidden md:block">
+                 <Star size={64} className="golden-star fill-current" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-16 flex justify-center">
+            <button 
+              onClick={() => onStartCheckout('anual')} 
+              className="hikari-btn-accent px-8 md:px-16 py-6 md:py-8 text-xl md:text-2xl font-extrabold cta-pulse flex items-center justify-center gap-3 shadow-2xl whitespace-nowrap"
+            >
+              QUERO COMEÇAR AGORA 
+              <div className="border-2 border-white/40 p-1 rounded-md">
+                <Zap size={28} />
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* SESSÃO 2 – STORYTELLING & CLAY ICONS */}
+      <section className="py-24 bg-slate-50 overflow-hidden relative">
+        <MusicalBackground />
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto mb-16">
+            <h2 className="text-h2 text-center text-slate-800 mb-10 leading-snug">
+              Por que tantas crianças brasileiras ficam em silêncio… <span className="text-[#D21E9D]">mesmo estudando japonês na escola todos os dias?</span>
+            </h2>
+            
+            <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-xl border border-slate-100 relative">
+              <div className="absolute -top-6 -left-6 w-20 h-20 bg-[#FFD700] rounded-2xl flex items-center justify-center shadow-lg transform -rotate-12">
+                <span className="text-3xl font-black">62%</span>
+              </div>
+              
+              <div className="space-y-6 text-lg text-slate-700 leading-relaxed font-medium">
+                <p>Das famílias brasileiras no Japão consideram o idioma a maior barreira de adaptação.</p>
+                <div className="pl-6 border-l-4 border-[#5DCCD6] space-y-2 py-2">
+                  <p>A criança entende o que o professor fala.</p>
+                  <p>Conhece as palavras.</p>
+                </div>
+                <p className="font-bold text-slate-900">Mas quando chega a hora de falar… o medo aparece.</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6">
+                  {['O erro vira vergonha.', 'A vergonha vira silêncio.', 'E o silêncio vira isolamento.'].map((txt, i) => (
+                    <div key={i} className="bg-slate-50 p-4 rounded-2xl text-sm font-bold text-slate-500 italic flex items-center justify-center text-center">
+                      "{txt}"
+                    </div>
+                  ))}
+                  <div className="bg-[#D21E9D]/10 p-4 rounded-2xl text-sm font-black text-[#D21E9D] flex items-center justify-center text-center">
+                    QUEBRA DO CICLO
+                  </div>
+                </div>
+                <p>
+                  O <span className="text-[#D21E9D] font-black">Método Hikari Melodia</span> não ensina apenas gramática. Nós usamos a música para "hackear" o sistema límbico (a parte emocional do cérebro), desligando o medo e ligando a memória afetiva.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            {METHODOLOGY_DATA.map((item) => (
+              <div key={item.id} onClick={() => setSelectedMethodology(item)}>
+                <ClayIcon icon={item.icon} color={item.color} label={item.title} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Levels Section */}
+      <section className="py-24 bg-white">
+          <div className="container mx-auto px-4">
+            <SectionTitle 
+              title="Uma Jornada Completa" 
+              subtitle="Do berçário à universidade, acompanhamos cada fase do desenvolvimento."
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Card Creche */}
+              <div 
+                onClick={() => setShowCreche(true)}
+                className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+              >
+                <div className="w-14 h-14 bg-[#5A9DFC]/10 text-[#5A9DFC] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Baby size={32} />
+                </div>
+                <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Creche</h3>
+                <p className="text-sm text-slate-500 font-medium mb-4">0 a 3 anos</p>
+                <p className="text-slate-600 text-sm leading-relaxed mb-6">Cuidado, afeto e estímulos sensoriais para os primeiros passos.</p>
+                <span className="text-[#5A9DFC] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Saiba mais <ArrowRight size={16} />
+                </span>
+              </div>
+
+              {/* Card Educação Infantil */}
+              <div 
+                onClick={() => setShowEducacaoInfantil(true)}
+                className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+              >
+                <div className="w-14 h-14 bg-[#D21E9D]/10 text-[#D21E9D] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Sparkles size={32} />
+                </div>
+                <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Educação Infantil</h3>
+                <p className="text-sm text-slate-500 font-medium mb-4">3 a 6 anos</p>
+                <p className="text-slate-600 text-sm leading-relaxed mb-6">Descoberta do mundo, socialização e introdução lúdica ao japonês.</p>
+                <span className="text-[#D21E9D] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Saiba mais <ArrowRight size={16} />
+                </span>
+              </div>
+
+              {/* Card Ensino Fundamental */}
+              <div 
+                onClick={() => setShowEnsinoFundamental(true)}
+                className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+              >
+                <div className="w-14 h-14 bg-[#4CAF50]/10 text-[#4CAF50] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <BookOpen size={32} />
+                </div>
+                <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Ensino Fundamental</h3>
+                <p className="text-sm text-slate-500 font-medium mb-4">6 a 14 anos</p>
+                <p className="text-slate-600 text-sm leading-relaxed mb-6">Base acadêmica sólida com o Sistema Objetivo de Ensino.</p>
+                <span className="text-[#4CAF50] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Saiba mais <ArrowRight size={16} />
+                </span>
+              </div>
+
+              {/* Card Ensino Médio */}
+              <div 
+                onClick={() => setShowEnsinoMedio(true)}
+                className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
+              >
+                <div className="w-14 h-14 bg-[#FFD700]/10 text-[#FFD700] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <GraduationCap size={32} />
+                </div>
+                <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Ensino Médio</h3>
+                <p className="text-sm text-slate-500 font-medium mb-4">15 a 17 anos</p>
+                <p className="text-slate-600 text-sm leading-relaxed mb-6">Preparação intensiva para o futuro, vestibulares e carreira.</p>
+                <span className="text-[#FFD700] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Saiba mais <ArrowRight size={16} />
+                </span>
+              </div>
+            </div>
+          </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-12 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <SectionTitle 
+            title="Momentos Hikari" 
+            subtitle="Um pouco do nosso dia a dia em imagens."
+          />
+        </div>
+        <ImageCarousel images={PRESENTATION_IMAGES} />
+      </section>
+
+      {/* Pricing Section */}
+      <PlansSection onSelectPlan={onStartCheckout} />
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg">
+              <Music size={24} strokeWidth={3} />
+            </div>
+            <span className="font-baloo font-black text-2xl tracking-tight">Hikari Melodia</span>
+          </div>
+          <p className="text-slate-500 text-sm mb-8">
+            Escola Objetivo de Iwata - Educação com Amor e Propósito.
+            <br/>Transformando vidas através da educação bilíngue.
+          </p>
+          <div className="flex justify-center gap-6 text-slate-400 text-sm font-medium">
+            <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
+            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+            <a href="#" className="hover:text-white transition-colors">Contato</a>
+          </div>
+          <p className="text-slate-700 text-xs mt-12">
+            © 2024 Hikari Melodia. Todos os direitos reservados.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
 // --- App Root ---
 
 export default function App() {
@@ -1264,219 +1544,14 @@ export default function App() {
 
       {/* Views */}
       {view === 'landing' && (
-        <div className="bg-white">
-          {/* Hero Section */}
-          <header className="relative min-h-[90vh] flex flex-col items-center justify-center p-6 overflow-hidden bg-gradient-to-b from-[#E0F7FA] via-[#F0F4F8] to-white">
-            <SakuraBackground />
-            <MusicalBackground />
-            
-            <nav className="absolute top-0 w-full p-6 flex justify-between items-center max-w-7xl mx-auto z-10">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg rotate-3">
-                  <Music size={24} strokeWidth={3} />
-                </div>
-                <span className="font-baloo font-black text-2xl text-slate-800 tracking-tight">Hikari Melodia</span>
-              </div>
-              <button 
-                onClick={() => handleStartCheckout('mensal')}
-                className="px-6 py-2.5 rounded-full bg-white text-slate-900 font-bold text-sm shadow-md hover:shadow-lg transition-all border border-slate-100 hidden md:block"
-              >
-                Área do Aluno
-              </button>
-            </nav>
-
-            <div className="relative z-10 text-center max-w-4xl mx-auto mt-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-slate-200 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <Sparkles size={16} className="text-[#FFD700]" />
-                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Método Exclusivo em Iwata</span>
-              </div>
-              
-              <h1 className="text-h1 font-black text-slate-900 mb-6 leading-tight drop-shadow-sm">
-                Seu filho aprendendo <span className="text-[#5DCCD6]">Japonês</span><br />
-                através da <span className="text-[#D21E9D] relative inline-block">
-                  Música
-                  <svg className="absolute w-full h-3 -bottom-1 left-0 text-[#D21E9D]/30" viewBox="0 0 100 10" preserveAspectRatio="none">
-                    <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" />
-                  </svg>
-                </span>
-              </h1>
-              
-              <p className="text-body text-slate-600 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
-                Transformamos a barreira do idioma em uma ponte sonora. 
-                Uma metodologia neurocientífica que usa ritmo e melodia para destravar a fala e a confiança de crianças brasileiras no Japão.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button 
-                  onClick={() => handleStartCheckout('anual')}
-                  className="hikari-btn-primary px-8 py-4 text-lg font-bold flex items-center gap-3 group"
-                >
-                  Começar Agora <ChevronRight className="group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className="px-8 py-4 rounded-[30px] font-bold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2">
-                  <Play size={20} className="text-[#5DCCD6] fill-current" /> Ver como funciona
-                </button>
-              </div>
-            </div>
-
-            {/* Floating Cards (Decorative) */}
-            <div className="absolute top-1/4 left-[5%] hidden lg:block animate-bounce-subtle" style={{ animationDelay: '1s' }}>
-               <div className="bg-white p-4 rounded-3xl shadow-xl rotate-[-6deg] max-w-[200px]">
-                 <div className="flex items-center gap-3 mb-2">
-                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                     <Brain size={16} />
-                   </div>
-                   <span className="font-bold text-xs text-slate-800">Neurociência</span>
-                 </div>
-                 <p className="text-[10px] text-slate-500 leading-tight">Estímulo direto ao córtex auditivo.</p>
-               </div>
-            </div>
-
-            <div className="absolute bottom-1/4 right-[5%] hidden lg:block animate-bounce-subtle" style={{ animationDelay: '2s' }}>
-               <div className="bg-white p-4 rounded-3xl shadow-xl rotate-[6deg] max-w-[200px]">
-                 <div className="flex items-center gap-3 mb-2">
-                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                     <Smile size={16} />
-                   </div>
-                   <span className="font-bold text-xs text-slate-800">Sem Tédio</span>
-                 </div>
-                 <p className="text-[10px] text-slate-500 leading-tight">Aprender brincando é mais eficaz.</p>
-               </div>
-            </div>
-          </header>
-
-          {/* Methodology Section */}
-          <section className="py-24 bg-white relative">
-            <div className="container mx-auto px-4">
-              <SectionTitle 
-                title="Por que a Música?" 
-                subtitle="Não é mágica, é ciência. Entenda como nosso método ativa áreas do cérebro que o ensino tradicional ignora."
-              />
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-                {METHODOLOGY_DATA.map((item) => (
-                  <div key={item.id} onClick={() => setSelectedMethodology(item)}>
-                    <ClayIcon icon={item.icon} color={item.color} label={item.title} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Levels Section */}
-          <section className="py-24 bg-slate-50">
-             <div className="container mx-auto px-4">
-                <SectionTitle 
-                  title="Uma Jornada Completa" 
-                  subtitle="Do berçário à universidade, acompanhamos cada fase do desenvolvimento."
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* Card Creche */}
-                  <div 
-                    onClick={() => setShowCreche(true)}
-                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
-                  >
-                    <div className="w-14 h-14 bg-[#5A9DFC]/10 text-[#5A9DFC] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <Baby size={32} />
-                    </div>
-                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Creche</h3>
-                    <p className="text-sm text-slate-500 font-medium mb-4">0 a 3 anos</p>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Cuidado, afeto e estímulos sensoriais para os primeiros passos.</p>
-                    <span className="text-[#5A9DFC] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Saiba mais <ArrowRight size={16} />
-                    </span>
-                  </div>
-
-                  {/* Card Educação Infantil */}
-                  <div 
-                    onClick={() => setShowEducacaoInfantil(true)}
-                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
-                  >
-                    <div className="w-14 h-14 bg-[#D21E9D]/10 text-[#D21E9D] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <Sparkles size={32} />
-                    </div>
-                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Educação Infantil</h3>
-                    <p className="text-sm text-slate-500 font-medium mb-4">3 a 6 anos</p>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Descoberta do mundo, socialização e introdução lúdica ao japonês.</p>
-                    <span className="text-[#D21E9D] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Saiba mais <ArrowRight size={16} />
-                    </span>
-                  </div>
-
-                  {/* Card Ensino Fundamental */}
-                  <div 
-                    onClick={() => setShowEnsinoFundamental(true)}
-                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
-                  >
-                    <div className="w-14 h-14 bg-[#4CAF50]/10 text-[#4CAF50] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <BookOpen size={32} />
-                    </div>
-                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Ensino Fundamental</h3>
-                    <p className="text-sm text-slate-500 font-medium mb-4">6 a 14 anos</p>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Base acadêmica sólida com o Sistema Objetivo de Ensino.</p>
-                    <span className="text-[#4CAF50] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Saiba mais <ArrowRight size={16} />
-                    </span>
-                  </div>
-
-                  {/* Card Ensino Médio */}
-                  <div 
-                    onClick={() => setShowEnsinoMedio(true)}
-                    className="bg-white p-6 rounded-[35px] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer border border-slate-100 group"
-                  >
-                    <div className="w-14 h-14 bg-[#FFD700]/10 text-[#FFD700] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <GraduationCap size={32} />
-                    </div>
-                    <h3 className="text-xl font-bold font-baloo text-slate-800 mb-2">Ensino Médio</h3>
-                    <p className="text-sm text-slate-500 font-medium mb-4">15 a 17 anos</p>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6">Preparação intensiva para o futuro, vestibulares e carreira.</p>
-                    <span className="text-[#FFD700] font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Saiba mais <ArrowRight size={16} />
-                    </span>
-                  </div>
-                </div>
-             </div>
-          </section>
-
-          {/* Gallery Section */}
-          <section className="py-12 bg-white">
-            <div className="container mx-auto px-4">
-              <SectionTitle 
-                title="Momentos Hikari" 
-                subtitle="Um pouco do nosso dia a dia em imagens."
-              />
-            </div>
-            <ImageCarousel images={PRESENTATION_IMAGES} />
-          </section>
-
-          {/* Pricing Section */}
-          <PlansSection onSelectPlan={handleStartCheckout} />
-
-          {/* Footer */}
-          <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
-            <div className="container mx-auto px-4 text-center">
-              <div className="flex items-center justify-center gap-2 mb-8">
-                <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg">
-                  <Music size={24} strokeWidth={3} />
-                </div>
-                <span className="font-baloo font-black text-2xl tracking-tight">Hikari Melodia</span>
-              </div>
-              <p className="text-slate-500 text-sm mb-8">
-                Escola Objetivo de Iwata - Educação com Amor e Propósito.
-                <br/>Transformando vidas através da educação bilíngue.
-              </p>
-              <div className="flex justify-center gap-6 text-slate-400 text-sm font-medium">
-                <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
-                <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-                <a href="#" className="hover:text-white transition-colors">Contato</a>
-              </div>
-              <p className="text-slate-700 text-xs mt-12">
-                © 2024 Hikari Melodia. Todos os direitos reservados.
-              </p>
-            </div>
-          </footer>
-        </div>
+        <HikariMelodiaPage 
+          onStartCheckout={handleStartCheckout}
+          setSelectedMethodology={setSelectedMethodology}
+          setShowCreche={setShowCreche}
+          setShowEducacaoInfantil={setShowEducacaoInfantil}
+          setShowEnsinoFundamental={setShowEnsinoFundamental}
+          setShowEnsinoMedio={setShowEnsinoMedio}
+        />
       )}
 
       {view === 'checkout' && (
