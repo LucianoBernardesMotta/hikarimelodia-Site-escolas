@@ -1374,8 +1374,30 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
       {/* Pricing Section */}
       <PlansSection onSelectPlan={onStartCheckout} />
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
+      {/* Localização - Google Maps */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4 text-center">
+          <SectionTitle 
+            title="Localização" 
+            subtitle="Visite-nos em Iwata"
+          />
+          <div className="max-w-4xl mx-auto bg-white p-4 rounded-[40px] shadow-lg border border-slate-100 overflow-hidden">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3279.0543058302683!2d137.8385229!3d34.7290255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601ae6a170d11083%3A0xbae408af01872536!2sTia%20Rosa%20Creche%20e%20escola!5e0!3m2!1spt-BR!2sjp!4v1769612651385!5m2!1spt-BR!2sjp" 
+              width="100%" 
+              height="450" 
+              style={{ border: 0, borderRadius: '24px' }} 
+              allowFullScreen={true} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Mapa de Localização Escola Objetivo Iwata"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - Escola Objetivo */}
+      <footer className="bg-slate-900 text-white py-16 border-t border-slate-800">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg">
