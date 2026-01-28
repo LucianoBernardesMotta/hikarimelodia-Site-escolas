@@ -1560,47 +1560,7 @@ const EscolaObjetivoPage = ({
           </div>
       </section>
 
-      {/* Sobre a Escola - Reestilizado */}
-      <section className="py-24 bg-slate-50 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="inline-block px-4 py-1 bg-[#D21E9D]/10 text-[#D21E9D] rounded-full font-black text-xs uppercase tracking-widest mb-4">
-                Nossa Essência
-              </div>
-              <h2 className="text-h2 text-slate-800 mb-6">Educação que Acolhe e Transforma</h2>
-              <p className="text-slate-600 text-lg leading-relaxed mb-6 font-medium">
-                Fundada com o propósito de oferecer educação de qualidade para a comunidade brasileira no Japão, a Escola Objetivo de Iwata se tornou referência em ensino bilíngue e acolhimento cultural.
-              </p>
-              
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                  <div className="w-12 h-12 bg-[#60D394]/20 text-[#60D394] rounded-xl flex items-center justify-center">
-                    <CheckCircle2 size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-800">Reconhecida pelo MEC</h4>
-                    <p className="text-xs text-slate-500">Validade total no Brasil</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                  <div className="w-12 h-12 bg-[#5A9DFC]/20 text-[#5A9DFC] rounded-xl flex items-center justify-center">
-                    <Globe size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-800">Homologada no Japão</h4>
-                    <p className="text-xs text-slate-500">Integração com o sistema local</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Diferenciais - Style Guide Cards */}
       <section className="py-24 bg-white">
