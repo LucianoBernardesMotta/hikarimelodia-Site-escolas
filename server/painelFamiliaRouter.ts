@@ -19,6 +19,78 @@ import {
 
 export const painelFamiliaRouter = router({
   /**
+   * Cadastro simples de responsável (nome e email)
+   * Cria um novo responsável no sistema sem vincular filhos inicialmente
+   */
+  cadastrarResponsavel: publicProcedure
+    .input(z.object({
+      nome: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+      email: z.string().email("E-mail inválido"),
+      telefone: z.string().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Verificar se já existe um responsável com este email
+      const existente = await db
+        .select()
+        .from(responsaveis)
+        .where(eq(responsaveis.email, input.email))
+        .limit(1);
+
+      if (existente.length > 0) {
+        // Já existe, retornar sucesso (usuário pode fazer login)
+        return { success: true, message: "Conta já existe. Faça login para continuar.", alreadyExists: true };
+      }
+
+      // Criar novo responsável
+      await db.insert(responsaveis).values({
+        email: input.email,
+        nome: input.nome,
+        telefone: input.telefone,
+        filhos: [], // Será vinculado posteriormente pela secretaria
+        ativo: true,
+      });
+
+      return { success: true, message: "Cadastro realizado com sucesso!", alreadyExists: false };
+    }),
+
+  /**
+   * Verifica se um email já está cadastrado como responsável ou equipe
+   */
+  verificarEmail: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) return { exists: false, tipo: null };
+
+      // Verificar equipe
+      const equipeMembro = await db
+        .select()
+        .from(equipe)
+        .where(eq(equipe.email, input.email))
+        .limit(1);
+
+      if (equipeMembro.length > 0) {
+        return { exists: true, tipo: 'equipe' as const };
+      }
+
+      // Verificar responsável
+      const responsavel = await db
+        .select()
+        .from(responsaveis)
+        .where(eq(responsaveis.email, input.email))
+        .limit(1);
+
+      if (responsavel.length > 0) {
+        return { exists: true, tipo: 'responsavel' as const };
+      }
+
+      return { exists: false, tipo: null };
+    }),
+
+  /**
    * Obtém o perfil do usuário logado (responsável ou equipe)
    */
   getProfile: protectedProcedure.query(async ({ ctx }) => {

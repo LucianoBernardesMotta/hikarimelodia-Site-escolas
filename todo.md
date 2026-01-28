@@ -61,3 +61,11 @@
 - [x] Testes unitários do router
 - [ ] Testes de integração
 - [ ] Validação de fluxos completos
+
+## Fase 6: Sistema de Login/Cadastro do Painel Família
+- [x] Criar tela de login com opções Google e cadastro Nome/Email
+- [x] Implementar lógica de cadastro simples no backend (salvar nome/email)
+- [x] Integrar fluxo de autenticação com redirecionamento ao Painel Família
+- [x] Testar fluxo completo de login/cadastro
+- [x] Implementar tela de boas-vindas para usuários não cadastrados
+- [x] Permitir auto-cadastro de responsáveis via formulário
