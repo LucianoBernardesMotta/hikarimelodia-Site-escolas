@@ -850,8 +850,8 @@ const PlansSection = ({ onSelectPlan }: { onSelectPlan: (plan: 'mensal' | 'anual
 const MethodologyModal = ({ item, onClose }: { item: MethodologyDetail, onClose: () => void }) => {
   return (
     <div className="fixed inset-0 z-[300] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-2xl rounded-[40px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-        <div className={`${item.color} p-8 text-white relative`}>
+      <div className="bg-white w-full max-w-2xl rounded-[40px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 flex flex-col max-h-[90vh]">
+        <div className={`${item.color} p-8 text-white relative shrink-0`}>
           <button onClick={onClose} className="absolute top-6 right-6 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all">
             <X size={20} />
           </button>
@@ -862,7 +862,7 @@ const MethodologyModal = ({ item, onClose }: { item: MethodologyDetail, onClose:
           <p className="text-white/90 font-medium text-lg">{item.description}</p>
         </div>
         
-        <div className="p-8 md:p-10 space-y-8 max-h-[70vh] overflow-y-auto">
+        <div className="p-8 md:p-10 space-y-8 overflow-y-auto">
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[#D21E9D]">
               <Zap size={20} fill="currentColor" />
