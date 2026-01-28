@@ -125,17 +125,18 @@ const METHODOLOGY_DATA: MethodologyDetail[] = [
 ];
 
 const PRESENTATION_IMAGES = [
-  "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1974&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=2040&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1972&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?q=80&w=2069&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=2072&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1460518451285-97b6aa326961?q=80&w=2070&auto=format&fit=crop"
+  "/images/slides/slide-01.jpg",
+  "/images/slides/slide-02.jpg",
+  "/images/slides/slide-03.jpg",
+  "/images/slides/slide-04.jpg",
+  "/images/slides/slide-05.jpg",
+  "/images/slides/slide-06.jpg",
+  "/images/slides/slide-07.jpg",
+  "/images/slides/slide-08.jpg",
+  "/images/slides/slide-09.jpg",
+  "/images/slides/slide-10.jpg",
+  "/images/slides/slide-11.jpg",
+  "/images/slides/slide-12.jpg"
 ];
 
 // --- Stats Helpers ---
