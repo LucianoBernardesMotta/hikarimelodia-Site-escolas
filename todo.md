@@ -72,3 +72,12 @@
 
 ## Bug Fixes
 - [x] Corrigir erro de query SQL com lista vazia de matrículas (IN ())
+
+## Fase 7: Botão Admin no Painel Família
+- [x] Adicionar botão "Admin" na parte superior esquerda do Painel Família
+- [x] Criar menu suspenso com opções de cargo (Diretor, Coordenador, Professor, Secretaria, Cantina, Transporte)
+- [x] Implementar modal administrativo com abas:
+  - [x] Mensagens recebidas (ler e responder mensagens dos pais)
+  - [x] Nova postagem (publicar no Mural ou Dia a Dia)
+  - [x] Gerenciar equipe (apenas para Diretora - criar/remover perfis)
+- [x] Botão visível para todos os usuários (sem autenticação extra nesta fase)

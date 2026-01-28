@@ -17,6 +17,10 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   User, 
   Calendar, 
@@ -36,6 +40,7 @@ import {
   Send,
   Paperclip,
   ChevronRight,
+  ChevronDown,
   Users,
   Settings,
   Shield,
@@ -48,7 +53,13 @@ import {
   Megaphone,
   Star,
   Plus,
-  X
+  X,
+  UserCog,
+  Inbox,
+  PenSquare,
+  UserPlus,
+  Trash2,
+  Edit
 } from 'lucide-react';
 
 // ============================================
@@ -129,11 +140,19 @@ interface Mensagem {
 // COMPONENTE PRINCIPAL
 // ============================================
 
+// Tipos para o Admin
+type CargoAdmin = 'diretor' | 'coordenador' | 'professor' | 'secretaria' | 'cantina' | 'transporte';
+
 export default function PainelFamilia() {
   const { user, loading: authLoading, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('meu-filho');
   const [selectedAluno, setSelectedAluno] = useState<Aluno | null>(null);
   const [userProfile, setUserProfile] = useState<{ tipo: 'responsavel' | 'equipe'; data: Responsavel | EquipeMembro } | null>(null);
+  
+  // Estados do Admin
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [selectedCargo, setSelectedCargo] = useState<CargoAdmin | null>(null);
+  const [adminTab, setAdminTab] = useState('mensagens');
 
   // Queries
   const { data: profileData, isLoading: profileLoading } = trpc.painelFamilia.getProfile.useQuery(
@@ -202,6 +221,66 @@ export default function PainelFamilia() {
               <h1 className="font-bold text-slate-800 text-lg">Painel Família</h1>
               <p className="text-xs text-slate-500">Escola Objetivo de Iwata</p>
             </div>
+            
+            {/* Botão Admin - Visível para todos (sem autenticação extra nesta fase) */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="ml-4 border-[#D21E9D] text-[#D21E9D] hover:bg-[#D21E9D]/10"
+                >
+                  <Shield size={16} className="mr-1" />
+                  Admin
+                  <ChevronDown size={14} className="ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuItem 
+                  onClick={() => { setSelectedCargo('diretor'); setAdminModalOpen(true); }}
+                  className="cursor-pointer"
+                >
+                  <Shield size={16} className="mr-2 text-red-500" />
+                  Diretor(a)
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => { setSelectedCargo('coordenador'); setAdminModalOpen(true); }}
+                  className="cursor-pointer"
+                >
+                  <Users size={16} className="mr-2 text-purple-500" />
+                  Coordenador(a)
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => { setSelectedCargo('professor'); setAdminModalOpen(true); }}
+                  className="cursor-pointer"
+                >
+                  <GraduationCap size={16} className="mr-2 text-blue-500" />
+                  Professor(a)
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={() => { setSelectedCargo('secretaria'); setAdminModalOpen(true); }}
+                  className="cursor-pointer"
+                >
+                  <Mail size={16} className="mr-2 text-slate-500" />
+                  Secretaria
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => { setSelectedCargo('cantina'); setAdminModalOpen(true); }}
+                  className="cursor-pointer"
+                >
+                  <Utensils size={16} className="mr-2 text-orange-500" />
+                  Cantina
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => { setSelectedCargo('transporte'); setAdminModalOpen(true); }}
+                  className="cursor-pointer"
+                >
+                  <Bus size={16} className="mr-2 text-green-500" />
+                  Transporte
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           <div className="flex items-center gap-4">
@@ -220,18 +299,6 @@ export default function PainelFamilia() {
                 </p>
               </div>
             </div>
-
-            {/* Admin Button (only for equipe) */}
-            {userProfile.tipo === 'equipe' && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="border-[#D21E9D] text-[#D21E9D] hover:bg-[#D21E9D]/10"
-              >
-                <Shield size={16} className="mr-1" />
-                Área Admin
-              </Button>
-            )}
 
             {/* Back to Site */}
             <Button 
@@ -336,6 +403,15 @@ export default function PainelFamilia() {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Modal Admin */}
+      <AdminModal 
+        open={adminModalOpen} 
+        onOpenChange={setAdminModalOpen}
+        cargo={selectedCargo}
+        activeTab={adminTab}
+        onTabChange={setAdminTab}
+      />
     </div>
   );
 }
@@ -1352,5 +1428,375 @@ function ChatTab({ mensagens, userEmail }: { mensagens: any[]; userEmail: string
         )}
       </Card>
     </div>
+  );
+}
+
+
+// ============================================
+// MODAL ADMIN
+// ============================================
+
+interface AdminModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  cargo: CargoAdmin | null;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+}
+
+function AdminModal({ open, onOpenChange, cargo, activeTab, onTabChange }: AdminModalProps) {
+  const [mensagemResposta, setMensagemResposta] = useState('');
+  const [novaPostagem, setNovaPostagem] = useState({ tipo: 'noticia', titulo: '', conteudo: '' });
+  const [novoMembro, setNovoMembro] = useState({ nome: '', email: '', cargo: 'professor' });
+
+  // Dados fictícios para demonstração
+  const mensagensRecebidas = [
+    { id: 1, de: 'João Silva (Pai)', assunto: 'Dúvida sobre tarefa', data: '28/01/2026 10:30', lido: false, texto: 'Bom dia! Gostaria de saber mais detalhes sobre a tarefa de matemática que foi passada ontem.' },
+    { id: 2, de: 'Maria Santos (Mãe)', assunto: 'Autorização passeio', data: '27/01/2026 15:45', lido: true, texto: 'Olá, preciso confirmar a autorização para o passeio do próximo mês.' },
+    { id: 3, de: 'Ana Oliveira (Mãe)', assunto: 'Alergia alimentar', data: '27/01/2026 09:00', lido: true, texto: 'Informo que meu filho desenvolveu alergia a amendoim recentemente.' },
+  ];
+
+  const equipeAtual = [
+    { id: 1, nome: 'Rosa Kayoko Tinen', cargo: 'Diretora', email: 'diretora.rosa@escolaobjetivo-iwata.com' },
+    { id: 2, nome: 'Carlos Yamamoto', cargo: 'Professor', email: 'prof.carlos@escolaobjetivo-iwata.com' },
+    { id: 3, nome: 'Mariana Costa', cargo: 'Coordenadora', email: 'coord.mariana@escolaobjetivo-iwata.com' },
+    { id: 4, nome: 'Roberto Tanaka', cargo: 'Motorista', email: 'motorista.roberto@escolaobjetivo-iwata.com' },
+  ];
+
+  const getCargoLabel = (c: CargoAdmin | null) => {
+    const labels: Record<CargoAdmin, string> = {
+      diretor: 'Diretor(a)',
+      coordenador: 'Coordenador(a)',
+      professor: 'Professor(a)',
+      secretaria: 'Secretaria',
+      cantina: 'Cantina',
+      transporte: 'Transporte',
+    };
+    return c ? labels[c] : 'Admin';
+  };
+
+  const getCargoIcon = (c: CargoAdmin | null) => {
+    const icons: Record<CargoAdmin, React.ReactNode> = {
+      diretor: <Shield size={20} className="text-red-500" />,
+      coordenador: <Users size={20} className="text-purple-500" />,
+      professor: <GraduationCap size={20} className="text-blue-500" />,
+      secretaria: <Mail size={20} className="text-slate-500" />,
+      cantina: <Utensils size={20} className="text-orange-500" />,
+      transporte: <Bus size={20} className="text-green-500" />,
+    };
+    return c ? icons[c] : <Shield size={20} />;
+  };
+
+  const handleEnviarResposta = (mensagemId: number) => {
+    alert(`Resposta enviada para mensagem ${mensagemId}: "${mensagemResposta}"`);
+    setMensagemResposta('');
+  };
+
+  const handlePublicar = () => {
+    alert(`Postagem publicada!\nTipo: ${novaPostagem.tipo}\nTítulo: ${novaPostagem.titulo}\nConteúdo: ${novaPostagem.conteudo}`);
+    setNovaPostagem({ tipo: 'noticia', titulo: '', conteudo: '' });
+  };
+
+  const handleAdicionarMembro = () => {
+    alert(`Novo membro adicionado!\nNome: ${novoMembro.nome}\nEmail: ${novoMembro.email}\nCargo: ${novoMembro.cargo}`);
+    setNovoMembro({ nome: '', email: '', cargo: 'professor' });
+  };
+
+  const handleRemoverMembro = (id: number, nome: string) => {
+    if (confirm(`Tem certeza que deseja remover ${nome} da equipe?`)) {
+      alert(`${nome} foi removido da equipe.`);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="border-b pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#D21E9D] to-[#B01A85] rounded-xl flex items-center justify-center text-white shadow-md">
+              {getCargoIcon(cargo)}
+            </div>
+            <div>
+              <DialogTitle className="text-xl">Painel Administrativo</DialogTitle>
+              <DialogDescription>
+                Acessando como: <strong>{getCargoLabel(cargo)}</strong>
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        <Tabs value={activeTab} onValueChange={onTabChange} className="flex-1 flex flex-col overflow-hidden">
+          <TabsList className="grid w-full grid-cols-3 mb-4 bg-slate-100 p-1 rounded-lg">
+            <TabsTrigger 
+              value="mensagens" 
+              className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md"
+            >
+              <Inbox size={16} />
+              Mensagens
+            </TabsTrigger>
+            <TabsTrigger 
+              value="postagem"
+              className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md"
+            >
+              <PenSquare size={16} />
+              Nova Postagem
+            </TabsTrigger>
+            {cargo === 'diretor' && (
+              <TabsTrigger 
+                value="equipe"
+                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md"
+              >
+                <UserCog size={16} />
+                Gerenciar Equipe
+              </TabsTrigger>
+            )}
+          </TabsList>
+
+          {/* Aba: Mensagens Recebidas */}
+          <TabsContent value="mensagens" className="flex-1 overflow-auto">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-slate-700">Mensagens dos Pais</h3>
+                <Badge variant="secondary">{mensagensRecebidas.filter(m => !m.lido).length} não lidas</Badge>
+              </div>
+              
+              <ScrollArea className="h-[400px] pr-4">
+                <div className="space-y-3">
+                  {mensagensRecebidas.map((msg) => (
+                    <Card key={msg.id} className={`border ${!msg.lido ? 'border-[#5DCCD6] bg-[#5DCCD6]/5' : 'border-slate-200'}`}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <p className="font-medium text-slate-800">{msg.de}</p>
+                            <p className="text-sm text-slate-500">{msg.assunto}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-slate-400">{msg.data}</p>
+                            {!msg.lido && <Badge className="bg-[#5DCCD6] text-white text-xs mt-1">Nova</Badge>}
+                          </div>
+                        </div>
+                        <p className="text-sm text-slate-600 mb-3 bg-slate-50 p-3 rounded-lg">{msg.texto}</p>
+                        <div className="flex gap-2">
+                          <Input 
+                            placeholder="Digite sua resposta..."
+                            value={mensagemResposta}
+                            onChange={(e) => setMensagemResposta(e.target.value)}
+                            className="flex-1"
+                          />
+                          <Button 
+                            size="sm" 
+                            className="bg-[#5DCCD6] hover:bg-[#4FBFD9]"
+                            onClick={() => handleEnviarResposta(msg.id)}
+                          >
+                            <Send size={14} className="mr-1" />
+                            Responder
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+          </TabsContent>
+
+          {/* Aba: Nova Postagem */}
+          <TabsContent value="postagem" className="flex-1 overflow-auto">
+            <div className="space-y-4">
+              <h3 className="font-semibold text-slate-700">Criar Nova Postagem</h3>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="tipo-postagem">Tipo de Postagem</Label>
+                  <Select value={novaPostagem.tipo} onValueChange={(v) => setNovaPostagem({...novaPostagem, tipo: v})}>
+                    <SelectTrigger id="tipo-postagem" className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="noticia">
+                        <div className="flex items-center gap-2">
+                          <Megaphone size={14} />
+                          Notícia / Comunicado
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="evento">
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} />
+                          Evento
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="foto">
+                        <div className="flex items-center gap-2">
+                          <ImageIcon size={14} />
+                          Foto / Galeria
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="cardapio">
+                        <div className="flex items-center gap-2">
+                          <Utensils size={14} />
+                          Cardápio do Dia
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="bem_estar">
+                        <div className="flex items-center gap-2">
+                          <Heart size={14} />
+                          Registro de Bem-Estar
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <Label htmlFor="destino-postagem">Publicar em</Label>
+                  <Select defaultValue="mural">
+                    <SelectTrigger id="destino-postagem" className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mural">Mural (todos veem)</SelectItem>
+                      <SelectItem value="dia-a-dia">Dia a Dia (por turma)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="titulo-postagem">Título</Label>
+                <Input 
+                  id="titulo-postagem"
+                  placeholder="Digite o título da postagem..."
+                  value={novaPostagem.titulo}
+                  onChange={(e) => setNovaPostagem({...novaPostagem, titulo: e.target.value})}
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="conteudo-postagem">Conteúdo</Label>
+                <Textarea 
+                  id="conteudo-postagem"
+                  placeholder="Digite o conteúdo da postagem..."
+                  value={novaPostagem.conteudo}
+                  onChange={(e) => setNovaPostagem({...novaPostagem, conteudo: e.target.value})}
+                  className="mt-1 min-h-[150px]"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button variant="outline" className="flex-1">
+                  <ImageIcon size={16} className="mr-2" />
+                  Anexar Imagem
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  <Video size={16} className="mr-2" />
+                  Anexar Vídeo
+                </Button>
+              </div>
+
+              <Button 
+                className="w-full bg-[#D21E9D] hover:bg-[#B01A85] text-white py-6"
+                onClick={handlePublicar}
+              >
+                <Megaphone size={18} className="mr-2" />
+                Publicar Agora
+              </Button>
+            </div>
+          </TabsContent>
+
+          {/* Aba: Gerenciar Equipe (apenas Diretor) */}
+          {cargo === 'diretor' && (
+            <TabsContent value="equipe" className="flex-1 overflow-auto">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-slate-700">Equipe Escolar</h3>
+                  <Badge variant="secondary">{equipeAtual.length} membros</Badge>
+                </div>
+
+                {/* Adicionar novo membro */}
+                <Card className="border-dashed border-2 border-[#5DCCD6]">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2 text-[#5DCCD6]">
+                      <UserPlus size={16} />
+                      Adicionar Novo Membro
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-3 gap-3">
+                      <Input 
+                        placeholder="Nome completo"
+                        value={novoMembro.nome}
+                        onChange={(e) => setNovoMembro({...novoMembro, nome: e.target.value})}
+                      />
+                      <Input 
+                        placeholder="E-mail"
+                        type="email"
+                        value={novoMembro.email}
+                        onChange={(e) => setNovoMembro({...novoMembro, email: e.target.value})}
+                      />
+                      <Select value={novoMembro.cargo} onValueChange={(v) => setNovoMembro({...novoMembro, cargo: v})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="professor">Professor(a)</SelectItem>
+                          <SelectItem value="coordenador">Coordenador(a)</SelectItem>
+                          <SelectItem value="secretaria">Secretaria</SelectItem>
+                          <SelectItem value="cantina">Cantina</SelectItem>
+                          <SelectItem value="transporte">Motorista</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button 
+                      className="mt-3 bg-[#5DCCD6] hover:bg-[#4FBFD9]"
+                      onClick={handleAdicionarMembro}
+                    >
+                      <Plus size={16} className="mr-1" />
+                      Adicionar à Equipe
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Lista de membros */}
+                <ScrollArea className="h-[300px] pr-4">
+                  <div className="space-y-2">
+                    {equipeAtual.map((membro) => (
+                      <Card key={membro.id} className="border-slate-200">
+                        <CardContent className="p-4 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarFallback className="bg-slate-200 text-slate-600">
+                                {membro.nome.charAt(0)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium text-slate-800">{membro.nome}</p>
+                              <p className="text-sm text-slate-500">{membro.cargo} • {membro.email}</p>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-blue-500">
+                              <Edit size={16} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="text-slate-400 hover:text-red-500"
+                              onClick={() => handleRemoverMembro(membro.id, membro.nome)}
+                            >
+                              <Trash2 size={16} />
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            </TabsContent>
+          )}
+        </Tabs>
+      </DialogContent>
+    </Dialog>
   );
 }
