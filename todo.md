@@ -7,3 +7,4 @@
 - [ ] Revisar e expandir a Área Administrativa conforme o original.
 - [ ] Ajustar CSS do DialogContent do Lightbox no App.tsx para mobile: reduzir max-height e posicionar botão de fechar dentro da área visível ou fixo no topo.
 - [ ] Ajustar CSS do DialogContent dos modais de Metodologia (selectedMethodology) no App.tsx para mobile: definir max-height como 90vh ou h-[90vh].
+- [ ] Mover a seção de "Níveis de Ensino" (com os cards Creche, Educação Infantil, Fundamental e Médio) do componente `HikariMelodiaPage` para o componente `EscolaObjetivoPage` no arquivo `App.tsx`, posicionando-a logo após a seção Hero.

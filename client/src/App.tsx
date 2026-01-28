@@ -1357,7 +1357,133 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
         </div>
       </section>
 
-      {/* Levels Section */}
+
+
+      {/* Gallery Section */}
+      <section className="py-12 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <SectionTitle 
+            title="Momentos Hikari" 
+            subtitle="Um pouco do nosso dia a dia em imagens."
+          />
+        </div>
+        <ImageCarousel images={PRESENTATION_IMAGES} />
+      </section>
+
+      {/* Pricing Section */}
+      <PlansSection onSelectPlan={onStartCheckout} />
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg">
+              <Music size={24} strokeWidth={3} />
+            </div>
+            <span className="font-baloo font-black text-2xl tracking-tight">Hikari Melodia</span>
+          </div>
+          <p className="text-slate-500 text-sm mb-8">
+            Escola Objetivo de Iwata - Educação com Amor e Propósito.
+            <br/>Transformando vidas através da educação bilíngue.
+          </p>
+          <div className="flex justify-center gap-6 text-slate-400 text-sm font-medium">
+            <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
+            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+            <a href="#" className="hover:text-white transition-colors">Contato</a>
+          </div>
+          <p className="text-slate-700 text-xs mt-12">
+            © 2024 Hikari Melodia. Todos os direitos reservados.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+const EscolaObjetivoPage = ({ 
+  setShowCreche, 
+  setShowEducacaoInfantil, 
+  setShowEnsinoFundamental, 
+  setShowEnsinoMedio 
+}: {
+  setShowCreche: (v: boolean) => void;
+  setShowEducacaoInfantil: (v: boolean) => void;
+  setShowEnsinoFundamental: (v: boolean) => void;
+  setShowEnsinoMedio: (v: boolean) => void;
+}) => {
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  return (
+    <div className="bg-white min-h-screen">
+      {/* Lightbox Modal */}
+      <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+        <DialogContent className="max-w-[95vw] w-auto h-auto p-0 border-none bg-transparent shadow-none flex flex-col items-center justify-center overflow-visible focus:outline-none">
+          <div className="relative w-full max-w-5xl flex flex-col items-center">
+            {/* Close Button - Fixed position relative to image container for better mobile UX */}
+            <button 
+              onClick={() => setIsLightboxOpen(false)}
+              className="absolute -top-12 right-0 md:-right-12 text-white hover:text-gray-300 transition-colors bg-black/50 hover:bg-black/70 rounded-full p-2 backdrop-blur-sm z-50"
+              aria-label="Fechar imagem"
+            >
+              <X size={24} />
+            </button>
+            
+            <img 
+              src="/hero-objetivo.png" 
+              alt="Colégio Objetivo de Iwata - Expandido" 
+              className="max-w-full max-h-[80vh] md:max-h-[90vh] object-contain rounded-xl shadow-2xl bg-black/20"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+      {/* Hero Institucional - Reestilizado com Style Guide Hikari */}
+      <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#5DCCD6] via-[#4FBFD9] to-[#D21E9D]/20 overflow-hidden text-center lg:text-left">
+        <MusicalBackground />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FFD700] text-slate-800 text-sm font-black mb-10 shadow-lg uppercase tracking-wider mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <School size={18} fill="currentColor" /> Educação de Qualidade desde 2006
+              </div>
+              
+              <h1 className="text-h1 text-slate-800 mb-2 leading-tight drop-shadow-sm flex flex-col md:flex-row md:items-baseline gap-4 justify-center lg:justify-start">
+                Colégio Objetivo de <span className="text-4xl md:text-5xl font-nunito font-bold text-slate-700">Iwata</span>
+              </h1>
+              <h2 className="text-2xl md:text-3xl font-baloo text-slate-700/80 mb-8 font-bold hidden">
+                
+              </h2>
+              <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium mx-auto lg:mx-0">
+                Com uma história que se estende por mais de uma década desde sua fundação em 2006, o Colégio Objetivo de Iwata consagrou-se como uma instituição de ensino comprometida com a excelência educacional e o desenvolvimento integral dos alunos. Sob Sistema de Ensino Objetivo, a escola visa proporcionar uma educação de qualidade, promovendo a participação coletiva em uma abordagem educacional inovadora e significativa. Essa missão visa preparar cidadãos competentes e habilidosos, tanto para o mercado de trabalho quanto para a convivência social solidária.
+              </p>
+              
+            </div>
+
+            <div className="flex-1 relative w-full max-w-xl cursor-pointer" onClick={() => setIsLightboxOpen(true)}>
+              <div className="relative z-10 rounded-[20px] overflow-hidden shadow-2xl border-[6px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_2.5s_infinite]" />
+                
+                <img 
+                  src="/hero-objetivo.png" 
+                  alt="Colégio Objetivo de Iwata - Educando com Amor" 
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Click Hint Overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+                  <Maximize2 className="text-white drop-shadow-md scale-0 group-hover:scale-100 transition-transform duration-300" size={48} />
+                </div>
+              </div>
+              <div className="absolute -bottom-10 -left-10 animate-bounce hidden md:block delay-700">
+                 <Star size={64} className="text-[#FFD700] fill-current drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Levels Section - Moved from HikariMelodiaPage */}
       <section className="py-24 bg-white">
           <div className="container mx-auto px-4">
             <SectionTitle 
@@ -1431,120 +1557,6 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
               </div>
             </div>
           </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section className="py-12 bg-slate-50">
-        <div className="container mx-auto px-4">
-          <SectionTitle 
-            title="Momentos Hikari" 
-            subtitle="Um pouco do nosso dia a dia em imagens."
-          />
-        </div>
-        <ImageCarousel images={PRESENTATION_IMAGES} />
-      </section>
-
-      {/* Pricing Section */}
-      <PlansSection onSelectPlan={onStartCheckout} />
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <div className="w-10 h-10 bg-[#5DCCD6] rounded-xl flex items-center justify-center text-white shadow-lg">
-              <Music size={24} strokeWidth={3} />
-            </div>
-            <span className="font-baloo font-black text-2xl tracking-tight">Hikari Melodia</span>
-          </div>
-          <p className="text-slate-500 text-sm mb-8">
-            Escola Objetivo de Iwata - Educação com Amor e Propósito.
-            <br/>Transformando vidas através da educação bilíngue.
-          </p>
-          <div className="flex justify-center gap-6 text-slate-400 text-sm font-medium">
-            <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
-            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-            <a href="#" className="hover:text-white transition-colors">Contato</a>
-          </div>
-          <p className="text-slate-700 text-xs mt-12">
-            © 2024 Hikari Melodia. Todos os direitos reservados.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-const EscolaObjetivoPage = () => {
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-
-  return (
-    <div className="bg-white min-h-screen">
-      {/* Lightbox Modal */}
-      <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-        <DialogContent className="max-w-[95vw] w-auto h-auto p-0 border-none bg-transparent shadow-none flex flex-col items-center justify-center overflow-visible focus:outline-none">
-          <div className="relative w-full max-w-5xl flex flex-col items-center">
-            {/* Close Button - Fixed position relative to image container for better mobile UX */}
-            <button 
-              onClick={() => setIsLightboxOpen(false)}
-              className="absolute -top-12 right-0 md:-right-12 text-white hover:text-gray-300 transition-colors bg-black/50 hover:bg-black/70 rounded-full p-2 backdrop-blur-sm z-50"
-              aria-label="Fechar imagem"
-            >
-              <X size={24} />
-            </button>
-            
-            <img 
-              src="/hero-objetivo.png" 
-              alt="Colégio Objetivo de Iwata - Expandido" 
-              className="max-w-full max-h-[80vh] md:max-h-[90vh] object-contain rounded-xl shadow-2xl bg-black/20"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-      {/* Hero Institucional - Reestilizado com Style Guide Hikari */}
-      <section className="relative pt-32 pb-24 bg-gradient-to-br from-[#5DCCD6] via-[#4FBFD9] to-[#D21E9D]/20 overflow-hidden text-center lg:text-left">
-        <MusicalBackground />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <div className="flex-1">
-              <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FFD700] text-slate-800 text-sm font-black mb-10 shadow-lg uppercase tracking-wider mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <School size={18} fill="currentColor" /> Educação de Qualidade desde 2006
-              </div>
-              
-              <h1 className="text-h1 text-slate-800 mb-2 leading-tight drop-shadow-sm flex flex-col md:flex-row md:items-baseline gap-4 justify-center lg:justify-start">
-                Colégio Objetivo de <span className="text-4xl md:text-5xl font-nunito font-bold text-slate-700">Iwata</span>
-              </h1>
-              <h2 className="text-2xl md:text-3xl font-baloo text-slate-700/80 mb-8 font-bold hidden">
-                
-              </h2>
-              <p className="text-lg md:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-medium mx-auto lg:mx-0">
-                Com uma história que se estende por mais de uma década desde sua fundação em 2006, o Colégio Objetivo de Iwata consagrou-se como uma instituição de ensino comprometida com a excelência educacional e o desenvolvimento integral dos alunos. Sob Sistema de Ensino Objetivo, a escola visa proporcionar uma educação de qualidade, promovendo a participação coletiva em uma abordagem educacional inovadora e significativa. Essa missão visa preparar cidadãos competentes e habilidosos, tanto para o mercado de trabalho quanto para a convivência social solidária.
-              </p>
-              
-            </div>
-
-            <div className="flex-1 relative w-full max-w-xl cursor-pointer" onClick={() => setIsLightboxOpen(true)}>
-              <div className="relative z-10 rounded-[20px] overflow-hidden shadow-2xl border-[6px] border-white backdrop-blur-sm group hover:scale-[1.02] transition-transform duration-500">
-                {/* Shimmer Effect */}
-                <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_2.5s_infinite]" />
-                
-                <img 
-                  src="/hero-objetivo.png" 
-                  alt="Colégio Objetivo de Iwata - Educando com Amor" 
-                  className="w-full h-full object-cover"
-                />
-                
-                {/* Click Hint Overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
-                  <Maximize2 className="text-white drop-shadow-md scale-0 group-hover:scale-100 transition-transform duration-300" size={48} />
-                </div>
-              </div>
-              <div className="absolute -bottom-10 -left-10 animate-bounce hidden md:block delay-700">
-                 <Star size={64} className="text-[#FFD700] fill-current drop-shadow-lg" />
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Sobre a Escola - Reestilizado */}
@@ -1738,7 +1750,14 @@ export default function App() {
           />
         )}
 
-        {view === 'eoi' && <EscolaObjetivoPage />}
+        {view === 'eoi' && (
+          <EscolaObjetivoPage 
+            setShowCreche={setShowCreche}
+            setShowEducacaoInfantil={setShowEducacaoInfantil}
+            setShowEnsinoFundamental={setShowEnsinoFundamental}
+            setShowEnsinoMedio={setShowEnsinoMedio}
+          />
+        )}
 
         {view === 'checkout' && (
           <CheckoutPage 
