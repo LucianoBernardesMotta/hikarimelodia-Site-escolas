@@ -1728,12 +1728,7 @@ export default function App() {
             >
               <Lock size={18} />
             </button>
-            <button 
-              onClick={() => handleStartCheckout('mensal')}
-              className="hidden md:flex px-5 py-2 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-all shadow-md"
-            >
-              Área do Aluno
-            </button>
+
           </div>
         </div>
       </nav>
