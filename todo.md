@@ -5,3 +5,4 @@
 - [ ] Implementar a página da Escola Objetivo de Iwata.
 - [ ] Garantir que todos os modais da Escola Objetivo estejam funcionando corretamente.
 - [ ] Revisar e expandir a Área Administrativa conforme o original.
+- [ ] Ajustar CSS do DialogContent do Lightbox no App.tsx para mobile: reduzir max-height e posicionar botão de fechar dentro da área visível ou fixo no topo.

@@ -1481,18 +1481,21 @@ const EscolaObjetivoPage = () => {
     <div className="bg-white min-h-screen">
       {/* Lightbox Modal */}
       <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] w-auto h-auto p-0 border-none bg-transparent shadow-none flex items-center justify-center overflow-hidden">
-          <div className="relative">
+        <DialogContent className="max-w-[95vw] w-auto h-auto p-0 border-none bg-transparent shadow-none flex flex-col items-center justify-center overflow-visible focus:outline-none">
+          <div className="relative w-full max-w-5xl flex flex-col items-center">
+            {/* Close Button - Fixed position relative to image container for better mobile UX */}
             <button 
               onClick={() => setIsLightboxOpen(false)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors bg-black/50 rounded-full p-2 backdrop-blur-sm"
+              className="absolute -top-12 right-0 md:-right-12 text-white hover:text-gray-300 transition-colors bg-black/50 hover:bg-black/70 rounded-full p-2 backdrop-blur-sm z-50"
+              aria-label="Fechar imagem"
             >
               <X size={24} />
             </button>
+            
             <img 
               src="/hero-objetivo.png" 
               alt="Colégio Objetivo de Iwata - Expandido" 
-              className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+              className="max-w-full max-h-[80vh] md:max-h-[90vh] object-contain rounded-xl shadow-2xl bg-black/20"
             />
           </div>
         </DialogContent>
