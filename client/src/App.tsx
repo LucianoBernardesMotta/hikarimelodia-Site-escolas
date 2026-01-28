@@ -1628,17 +1628,23 @@ const EscolaObjetivoPage = ({
           </div>
           <div>
             <h4 className="font-bold text-lg mb-6 font-baloo text-[#5DCCD6]">Contato</h4>
-            <ul className="space-y-4 text-slate-400 text-sm font-medium">
-              <li className="flex items-center justify-center md:justify-start gap-3"><MapPin size={18} className="text-[#FFD700]" /> Iwata-shi, Shizuoka-ken</li>
-              <li className="flex items-center justify-center md:justify-start gap-3"><MessageSquare size={18} className="text-[#FFD700]" /> +81 00-0000-0000</li>
-              <li className="flex items-center justify-center md:justify-start gap-3"><Clock size={18} className="text-[#FFD700]" /> Seg - Sex: 8h às 17h</li>
-            </ul>
+            <div className="space-y-4 text-slate-400 text-sm font-medium">
+              <p className="font-bold text-white mb-2">Escola Objetivo de Iwata - Tia Rosa</p>
+              <p className="flex items-center justify-center md:justify-start gap-3"><Users size={18} className="text-[#FFD700] shrink-0" /> Diretora: Rosa Kayoko Tinen</p>
+              <p className="flex items-start justify-center md:justify-start gap-3"><MapPin size={18} className="text-[#FFD700] shrink-0 mt-1" /> 438-0811 Shizuoka-ken, Iwata-shi, Hitokoto 3592</p>
+              <p className="flex items-center justify-center md:justify-start gap-3"><MessageSquare size={18} className="text-[#FFD700] shrink-0" /> 0538-36-3225</p>
+              <p className="flex items-center justify-center md:justify-start gap-3 break-all"><span className="text-[#FFD700] font-bold">@</span> tiarosaiwata@hotmail.com</p>
+            </div>
           </div>
           <div>
             <h4 className="font-bold text-lg mb-6 font-baloo text-[#D21E9D]">Redes Sociais</h4>
             <div className="flex gap-4 justify-center md:justify-start">
-              <a href="#" className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#FFD700] hover:text-slate-900 transition-all">FB</a>
-              <a href="#" className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#D21E9D] hover:text-white transition-all">IG</a>
+              <a href="https://www.facebook.com/groups/125278208150208" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              </a>
+              <a href="https://www.instagram.com/tiarosa_objetivo_iwata/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#E4405F] hover:text-white transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
             </div>
           </div>
         </div>
