@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import PainelFamilia from "@/pages/PainelFamilia";
 import { 
   Music, 
   Brain, 
@@ -1359,7 +1360,6 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
       </section>
 
 
-
       {/* Gallery Section */}
       <section className="py-12 bg-slate-50">
         <div className="container mx-auto px-4">
@@ -1407,15 +1407,18 @@ const EscolaObjetivoPage = ({
   setShowCreche, 
   setShowEducacaoInfantil, 
   setShowEnsinoFundamental, 
-  setShowEnsinoMedio 
+  setShowEnsinoMedio,
+  onNavigateToPainel
 }: {
   setShowCreche: (v: boolean) => void;
   setShowEducacaoInfantil: (v: boolean) => void;
   setShowEnsinoFundamental: (v: boolean) => void;
   setShowEnsinoMedio: (v: boolean) => void;
+  onNavigateToPainel: () => void;
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  // make sure to consider if you need authentication for certain routes
   return (
     <div className="bg-white min-h-screen">
       {/* Lightbox Modal */}
@@ -1460,6 +1463,15 @@ const EscolaObjetivoPage = ({
                 Com uma história que se estende por mais de uma década desde sua fundação em 2006, o Colégio Objetivo de Iwata consagrou-se como uma instituição de ensino comprometida com a excelência educacional e o desenvolvimento integral dos alunos. Sob Sistema de Ensino Objetivo, a escola visa proporcionar uma educação de qualidade, promovendo a participação coletiva em uma abordagem educacional inovadora e significativa. Essa missão visa preparar cidadãos competentes e habilidosos, tanto para o mercado de trabalho quanto para a convivência social solidária.
               </p>
               
+              {/* Botão Painel Família */}
+              <button
+                onClick={onNavigateToPainel}
+                className="inline-flex items-center gap-3 px-8 py-4 bg-[#D21E9D] hover:bg-[#B01A85] text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                <Users size={22} />
+                Painel Família
+                <ChevronRight size={20} />
+              </button>
             </div>
 
             <div className="flex-1 relative w-full max-w-xl cursor-pointer" onClick={() => setIsLightboxOpen(true)}>
@@ -1656,7 +1668,7 @@ const EscolaObjetivoPage = ({
 // --- App Root ---
 
 export default function App() {
-  const [view, setView] = useState<'landing' | 'checkout' | 'welcome' | 'eoi'>('landing');
+  const [view, setView] = useState<'landing' | 'checkout' | 'welcome' | 'eoi' | 'painel-familia'>('landing');
   const [selectedPlan, setSelectedPlan] = useState<'mensal' | 'anual'>('anual');
   const [userData, setUserData] = useState<any>(null);
   
@@ -1742,6 +1754,7 @@ export default function App() {
             setShowEducacaoInfantil={setShowEducacaoInfantil}
             setShowEnsinoFundamental={setShowEnsinoFundamental}
             setShowEnsinoMedio={setShowEnsinoMedio}
+            onNavigateToPainel={() => setView('painel-familia')}
           />
         )}
 
@@ -1755,6 +1768,10 @@ export default function App() {
 
         {view === 'welcome' && userData && (
           <WelcomePage userData={userData} />
+        )}
+
+        {view === 'painel-familia' && (
+          <PainelFamilia />
         )}
       </div>
 
