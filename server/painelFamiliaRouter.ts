@@ -152,11 +152,17 @@ export const painelFamiliaRouter = router({
 
     // Buscar alunos pelos números de matrícula
     const matriculas = responsavel[0].filhos as string[];
+    
+    // Se não houver matrículas vinculadas, retornar lista vazia
+    if (!matriculas || matriculas.length === 0) return [];
+
+    // Usar inArray do drizzle-orm para evitar SQL injection e tratar lista vazia
+    const { inArray } = await import('drizzle-orm');
     const alunosList = await db
       .select()
       .from(alunos)
       .where(and(
-        sql`${alunos.matricula} IN (${sql.join(matriculas.map(m => sql`${m}`), sql`, `)})`,
+        inArray(alunos.matricula, matriculas),
         eq(alunos.ativo, true)
       ));
 

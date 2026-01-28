@@ -69,3 +69,6 @@
 - [x] Testar fluxo completo de login/cadastro
 - [x] Implementar tela de boas-vindas para usuários não cadastrados
 - [x] Permitir auto-cadastro de responsáveis via formulário
+
+## Bug Fixes
+- [x] Corrigir erro de query SQL com lista vazia de matrículas (IN ())
