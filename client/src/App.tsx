@@ -1363,8 +1363,8 @@ const HikariMelodiaPage = ({ onStartCheckout, setSelectedMethodology, setShowCre
       <section className="py-12 bg-slate-50">
         <div className="container mx-auto px-4">
           <SectionTitle 
-            title="Momentos Hikari" 
-            subtitle="Um pouco do nosso dia a dia em imagens."
+            title="Confiança para Falar, Sem Medo de Errar" 
+            subtitle="Recurso em Foco: O Treinador de Pronúncia"
           />
         </div>
         <ImageCarousel images={PRESENTATION_IMAGES} />

@@ -8,3 +8,4 @@
 - [ ] Ajustar CSS do DialogContent do Lightbox no App.tsx para mobile: reduzir max-height e posicionar botão de fechar dentro da área visível ou fixo no topo.
 - [ ] Ajustar CSS do DialogContent dos modais de Metodologia (selectedMethodology) no App.tsx para mobile: definir max-height como 90vh ou h-[90vh].
 - [ ] Mover a seção de "Níveis de Ensino" (com os cards Creche, Educação Infantil, Fundamental e Médio) do componente `HikariMelodiaPage` para o componente `EscolaObjetivoPage` no arquivo `App.tsx`, posicionando-a logo após a seção Hero.
+- [ ] Atualizar textos da seção "Momentos Hikari" no App.tsx: Título para "Confiança para Falar, Sem Medo de Errar" e descrição para "Recurso em Foco: O Treinador de Pronúncia".
