@@ -235,7 +235,7 @@ export default function PainelFamilia() {
                   <ChevronDown size={14} className="ml-1" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
+              <DropdownMenuContent align="start" className="w-48 bg-white border border-gray-200 shadow-lg">
                 <DropdownMenuItem 
                   onClick={() => { setSelectedCargo('diretor'); setAdminModalOpen(true); }}
                   className="cursor-pointer"

@@ -81,3 +81,6 @@
   - [x] Nova postagem (publicar no Mural ou Dia a Dia)
   - [x] Gerenciar equipe (apenas para Diretora - criar/remover perfis)
 - [x] Botão visível para todos os usuários (sem autenticação extra nesta fase)
+
+## Bug Fixes - Menu Admin
+- [x] Corrigir menu Admin transparente - aplicar fundo sólido conforme style guide
