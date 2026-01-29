@@ -193,20 +193,12 @@ export default function PainelFamilia() {
     }
   }, [alunosData, selectedAluno]);
 
-  // Loading state
-  if (authLoading || profileLoading) {
+  // Loading state (apenas para queries, não para autenticação)
+  if (profileLoading && user) {
     return <LoadingScreen />;
   }
 
-  // Not authenticated
-  if (!user) {
-    return <LoginScreen />;
-  }
-
-  // Profile not found (user not registered as responsavel or equipe)
-  if (!userProfile) {
-    return <AccessDeniedScreen userEmail={user.email || ''} userName={user.name || ''} onLogout={logout} />;
-  }
+  // Acesso livre - sem verificação de autenticação
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -289,13 +281,13 @@ export default function PainelFamilia() {
               <Avatar className="h-9 w-9">
                 <AvatarImage src={undefined} />
                 <AvatarFallback className="bg-[#5DCCD6] text-white text-sm">
-                  {userProfile.data.nome?.charAt(0) || 'U'}
+                  {userProfile?.data?.nome?.charAt(0) || 'V'}
                 </AvatarFallback>
               </Avatar>
               <div className="text-right">
-                <p className="text-sm font-medium text-slate-700">{userProfile.data.nome}</p>
+                <p className="text-sm font-medium text-slate-700">{userProfile?.data?.nome || 'Visitante'}</p>
                 <p className="text-xs text-slate-500 capitalize">
-                  {userProfile.tipo === 'equipe' ? (userProfile.data as EquipeMembro).cargo : 'Responsável'}
+                  {userProfile?.tipo === 'equipe' ? (userProfile.data as EquipeMembro).cargo : 'Visitante'}
                 </p>
               </div>
             </div>
@@ -327,7 +319,7 @@ export default function PainelFamilia() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Aluno Selector (for responsaveis with multiple children) */}
-        {userProfile.tipo === 'responsavel' && alunosData && alunosData.length > 1 && (
+        {userProfile?.tipo === 'responsavel' && alunosData && alunosData.length > 1 && (
           <div className="mb-6">
             <p className="text-sm text-slate-500 mb-2">Selecione o aluno:</p>
             <div className="flex gap-3 flex-wrap">
@@ -399,7 +391,7 @@ export default function PainelFamilia() {
 
           {/* Tab: Chat */}
           <TabsContent value="chat">
-            <ChatTab mensagens={mensagensData || []} userEmail={user.email || ''} />
+            <ChatTab mensagens={mensagensData || []} userEmail={user?.email || 'visitante@escola.com'} />
           </TabsContent>
         </Tabs>
       </main>
