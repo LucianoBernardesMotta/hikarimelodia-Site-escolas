@@ -1510,7 +1510,7 @@ function AdminModal({ open, onOpenChange, cargo, activeTab, onTabChange }: Admin
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col bg-white border border-gray-200 shadow-xl">
         <DialogHeader className="border-b pb-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-[#D21E9D] to-[#B01A85] rounded-xl flex items-center justify-center text-white shadow-md">
